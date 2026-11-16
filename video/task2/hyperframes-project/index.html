@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop800.woff2") format("woff2"); font-weight: 800; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop900.woff2") format("woff2"); font-weight: 900; }
+      :root { --yellow: #ffd60a; --orange: #ff6a1a; --red: #ff2d3d; --green: #2bd96b; --blue: #3aa0ff; --dark: rgba(8,10,20,0.86); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05070d; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Poppins", sans-serif; color: #fff; }
+      .clip { position: absolute; inset: 0; }
+      video.clip { width: 1080px; height: 1920px; object-fit: cover; }
+      .layer { position: absolute; inset: 0; pointer-events: none; }
+      .A { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: 0.95; }
+      .sh { text-shadow: 0 6px 0 rgba(0,0,0,0.35), 0 12px 40px rgba(0,0,0,0.6); }
+      .top { position: absolute; left: 60px; right: 140px; top: 330px; text-align: center; }
+      .pill { display: inline-block; padding: 12px 30px; border-radius: 999px; font-weight: 900; font-size: 42px; }
+      .py { background: var(--yellow); color: #111; }
+      .pd { background: var(--dark); color: #fff; }
+      .pr { background: var(--red); color: #fff; }
+      #vig { background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%); }
+      #shade { background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0) 52%, rgba(0,0,0,0.45) 75%, rgba(0,0,0,0) 100%); }
+      #flash { background: #fff; opacity: 0; }
+
+      /* captions */
+      .cap { top: 1060px; bottom: auto; left: 100px; right: 190px; height: auto; text-align: center; font-weight: 900; font-size: 62px; line-height: 1.12; text-transform: uppercase; }
+      .cw { display: inline-block; margin: 0 0.1em; color: #fff; -webkit-text-stroke: 10px #000; paint-order: stroke fill; text-shadow: 0 8px 18px rgba(0,0,0,0.55); transform-origin: 50% 60%; }
+      .cw.emph.on { color: var(--yellow); }
+
+      /* hook */
+      #hookA { font-size: 190px; color: #fff; }
+      #hookB { font-size: 120px; color: var(--yellow); margin-top: 10px; }
+      #plane { position: absolute; left: 0; top: 760px; width: 1080px; height: 260px; }
+      #portable { margin-top: 26px; }
+
+      /* chips */
+      #chipsHead { font-size: 72px; }
+      .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 22px; }
+      .chip { display: inline-flex; align-items: center; gap: 12px; padding: 14px 28px; border-radius: 999px; background: var(--dark); border: 4px solid rgba(255,255,255,0.3); font-weight: 900; font-size: 42px; color: rgba(255,255,255,0.7); }
+      .chip .tk { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; }
+      .chip .tk svg { width: 26px; height: 26px; opacity: 0; }
+      .chip.on { background: var(--yellow); border-color: var(--yellow); color: #111; }
+      .chip.on .tk { background: #111; } .chip.on .tk svg { opacity: 1; }
+
+      /* hotel */
+      #hotelCard { display: inline-flex; align-items: center; gap: 24px; background: var(--dark); border-radius: 30px; padding: 22px 40px 22px 26px; }
+      #hotelCard .A { font-size: 110px; }
+      #susah { margin-top: 26px; display: inline-block; position: relative; }
+      #susah .A { font-size: 96px; color: #fff; background: var(--red); padding: 10px 30px 14px; border-radius: 20px; transform: rotate(-2deg); display: inline-block; }
+
+      /* steps */
+      #stepsHead { font-size: 92px; }
+      .steps { display: flex; flex-direction: column; gap: 16px; margin: 26px auto 0; width: 640px; }
+      .step { display: flex; align-items: center; gap: 22px; background: var(--dark); border-radius: 24px; padding: 14px 24px; border: 4px solid rgba(255,255,255,0.15); opacity: 0.45; }
+      .step .n { width: 74px; height: 74px; border-radius: 50%; background: rgba(255,255,255,0.15); font-family: "Anton"; font-size: 50px; display: flex; align-items: center; justify-content: center; }
+      .step .t { font-weight: 900; font-size: 46px; }
+      .step.on { opacity: 1; border-color: var(--yellow); }
+      .step.on .n { background: var(--yellow); color: #111; }
+
+      /* problems */
+      .prob { display: inline-flex; align-items: center; gap: 22px; background: var(--dark); border-radius: 28px; padding: 18px 36px 18px 22px; border: 5px solid var(--blue); }
+      .prob .A { font-size: 92px; }
+      .prob svg { width: 110px; height: 110px; }
+      #rainTint { background: linear-gradient(180deg, rgba(10,25,60,0.6), rgba(10,25,60,0.35) 50%, rgba(5,10,30,0.7)); }
+      .drop { position: absolute; top: 0; width: 3px; border-radius: 3px; background: linear-gradient(180deg, rgba(200,225,255,0), rgba(200,225,255,0.75)); }
+
+      /* timers */
+      #m30 { display: inline-flex; flex-direction: column; align-items: center; background: var(--dark); border: 6px solid var(--yellow); border-radius: 36px; padding: 18px 56px 24px; }
+      #m30 .A { font-size: 190px; } #m30 .u { font-weight: 900; font-size: 46px; letter-spacing: 0.14em; color: var(--yellow); }
+      #kering { margin-top: 24px; }
+      #dialWrap { position: relative; width: 400px; height: 400px; margin: 0 auto; }
+      #dialWrap svg { position: absolute; inset: 0; }
+      #dialC { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #dialNum { font-family: "Anton"; font-size: 160px; line-height: 0.95; }
+      #dialU { font-weight: 900; font-size: 40px; letter-spacing: 0.12em; color: var(--yellow); }
+      #maxLbl { margin-top: 24px; }
+
+      /* temp */
+      #tempBadge { display: inline-flex; align-items: center; gap: 20px; padding: 22px 42px 22px 30px; border-radius: 36px; background: var(--dark); border: 6px solid var(--orange); }
+      #tempNum { font-family: "Anton"; font-size: 200px; line-height: 1; min-width: 280px; text-align: right; }
+      #tempU { font-family: "Anton"; font-size: 110px; color: var(--orange); align-self: flex-start; margin-top: 16px; }
+      #lockRow { margin-top: 26px; display: flex; justify-content: center; align-items: center; gap: 18px; }
+      #lockRow .A { font-size: 92px; } #lockRow .A span { color: var(--yellow); }
+
+      #smallCard { display: inline-flex; align-items: center; gap: 22px; background: var(--dark); border-radius: 30px; padding: 18px 40px 18px 24px; border: 5px solid var(--yellow); }
+      #smallCard .A { font-size: 104px; }
+      #mana { margin-top: 26px; }
+      /* safe */
+      #shield { width: 210px; height: 240px; display: block; margin: 0 auto; }
+      #safeLbl { margin-top: 18px; font-size: 104px; }
+      #safeLbl span { color: var(--green); }
+
+      /* price */
+      #burst { position: relative; width: 560px; height: 560px; margin: -40px auto 0; }
+      #burst svg { position: absolute; inset: 0; }
+      #burstTxt { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #111; transform: rotate(-8deg); }
+      #burstTxt .a { font-family: "Anton"; font-size: 84px; line-height: 0.95; }
+      #burstTxt .b { font-family: "Anton"; font-size: 150px; line-height: 0.9; color: var(--red); }
+      #rugi { position: absolute; left: 0; right: 0; top: 860px; text-align: center; }
+      #rugi .A { display: inline-block; font-size: 112px; color: var(--red); border: 10px solid var(--red); border-radius: 18px; padding: 4px 30px 10px; transform: rotate(-10deg); background: rgba(255,255,255,0.92); }
+
+      /* CTA */
+      #naik .box { display: inline-block; background: var(--red); padding: 18px 40px 24px; border-radius: 26px; transform: rotate(-3deg); box-shadow: 0 18px 50px rgba(0,0,0,0.5); }
+      #naik .A { font-size: 110px; }
+      #ctaCard { position: absolute; left: 70px; right: 150px; top: 860px; text-align: center; }
+      #ctaCard .card { background: var(--yellow); color: #111; border-radius: 34px; padding: 26px 30px 32px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+      #ctaCard .A { font-size: 112px; }
+      #ctaCard .w { font-weight: 900; font-size: 40px; margin-top: 8px; }
+      #ctaCard .w b { background: #111; color: var(--yellow); padding: 0 14px; border-radius: 10px; }
+      #bag { position: absolute; left: 395px; top: 1400px; width: 150px; }
+      #arrows { position: absolute; left: 410px; top: 1570px; width: 120px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="36.4" data-width="1080" data-height="1920" data-fps="60">
+      <video id="v0" class="clip" src="assets/video/lv0.mp4" data-start="0.00" data-duration="1.86" data-media-start="0.0" muted playsinline></video>
+      <video id="v1" class="clip" src="assets/video/lv0.mp4" data-start="1.86" data-duration="1.86" data-media-start="38.5" muted playsinline></video>
+      <video id="v2" class="clip" src="assets/video/lv0.mp4" data-start="3.72" data-duration="0.78" data-media-start="57.4" muted playsinline></video>
+      <video id="v3" class="clip" src="assets/video/IMG_2345.mp4" data-start="4.50" data-duration="0.84" data-media-start="7.8" muted playsinline></video>
+      <video id="v4" class="clip" src="assets/video/IMG_2493.mp4" data-start="5.35" data-duration="1.08" data-media-start="52.0" muted playsinline></video>
+      <video id="v5" class="clip" src="assets/video/copy0B.mp4" data-start="6.42" data-duration="1.47" data-media-start="1.0" muted playsinline></video>
+      <video id="v6" class="clip" src="assets/video/IMG_2344.mp4" data-start="7.90" data-duration="2.64" data-media-start="0.0" muted playsinline></video>
+      <video id="v7" class="clip" src="assets/video/IMG_2344.mp4" data-start="10.53" data-duration="0.63" data-media-start="8.0" muted playsinline></video>
+      <video id="v8" class="clip" src="assets/video/IMG_2344.mp4" data-start="11.16" data-duration="1.00" data-media-start="31.0" muted playsinline></video>
+      <video id="v9" class="clip" src="assets/video/IMG_2345.mp4" data-start="12.16" data-duration="0.91" data-media-start="4.6" muted playsinline></video>
+      <video id="v10" class="clip" src="assets/video/IMG_2344.mp4" data-start="13.07" data-duration="2.04" data-media-start="37.5" muted playsinline></video>
+      <video id="v11" class="clip" src="assets/video/copy0B.mp4" data-start="15.11" data-duration="1.20" data-media-start="18.6" muted playsinline></video>
+      <video id="v12" class="clip" src="assets/video/hook.mp4" data-start="16.31" data-duration="0.85" data-media-start="0.0" muted playsinline></video>
+      <video id="v13" class="clip" src="assets/video/IMG_2493.mp4" data-start="17.16" data-duration="2.11" data-media-start="0.0" muted playsinline></video>
+      <video id="v14" class="clip" src="assets/video/IMG_2344.mp4" data-start="19.27" data-duration="1.33" data-media-start="33.0" muted playsinline></video>
+      <video id="v15" class="clip" src="assets/video/lv0.mp4" data-start="20.60" data-duration="1.44" data-media-start="54.6" muted playsinline></video>
+      <video id="v16" class="clip" src="assets/video/lv0.mp4" data-start="22.04" data-duration="2.60" data-media-start="31.2" muted playsinline></video>
+      <video id="v17" class="clip" src="assets/video/IMG_2493.mp4" data-start="24.64" data-duration="2.48" data-media-start="97.0" muted playsinline></video>
+      <video id="v18" class="clip" src="assets/video/lv0.mp4" data-start="27.12" data-duration="1.64" data-media-start="35.0" muted playsinline></video>
+      <video id="v19" class="clip" src="assets/video/IMG_2344.mp4" data-start="28.76" data-duration="1.54" data-media-start="0.5" muted playsinline></video>
+      <video id="v20" class="clip" src="assets/video/lv0.mp4" data-start="30.30" data-duration="1.54" data-media-start="10.0" muted playsinline></video>
+      <video id="v21" class="clip" src="assets/video/lv0.mp4" data-start="31.84" data-duration="1.12" data-media-start="57.4" muted playsinline></video>
+      <video id="v22" class="clip" src="assets/video/IMG_2345.mp4" data-start="32.96" data-duration="3.44" data-media-start="19.6" muted playsinline></video>
+
+      <div id="vig" class="layer clip" data-start="0" data-duration="36.4"></div>
+      <div id="shade" class="layer clip" data-start="0" data-duration="36.4"></div>
+      <div id="rainTint" class="layer clip" data-start="16.31" data-duration="0.85"></div>
+      <div id="rain" data-layout-allow-overflow class="layer clip" data-start="16.31" data-duration="0.85"></div>
+
+      <!-- G1 hook 0–1.40 -->
+      <div id="g1" class="layer clip" data-start="0.00" data-duration="1.86">
+        <div class="top"><div id="hookA" class="A sh">Kaki travel?</div></div>
+        <svg id="plane" viewBox="0 0 1080 260">
+          <path id="trail" d="M-40 210 Q 380 40 760 120" fill="none" stroke="#ffd60a" stroke-width="8" stroke-dasharray="22 18" stroke-linecap="round" />
+          <g id="planeG"><path d="M0 -14 L70 -6 L100 -40 L116 -40 L100 -4 L150 0 L100 4 L116 40 L100 40 L70 6 L0 14 L-10 30 L-24 30 L-14 0 L-24 -30 L-10 -30 Z" fill="#fff" stroke="#111" stroke-width="5" stroke-linejoin="round" /></g>
+        </svg>
+      </div>
+      <!-- G2 portable 1.40–3.24 -->
+      <div id="g2" class="layer clip" data-start="1.86" data-duration="1.86">
+        <div class="top"><div id="hookB" class="A sh">Wajib bawa<br />benda ni!</div><div id="portable"><span class="pill py">PENGERING PORTABLE</span></div></div>
+      </div>
+      <!-- G3 kasut/stokin/baju 3.24–6.76 -->
+      <div id="g3" class="layer clip" data-start="3.72" data-duration="4.17">
+        <div class="top"><div id="chipsHead" class="A sh">Senang nak keringkan</div>
+          <div class="chips">
+            <div class="chip" id="c1"><span class="tk"><svg viewBox="0 0 26 26"><path d="M5 13 l5 5 l11-11" fill="none" stroke="#ffd60a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>KASUT</div>
+            <div class="chip" id="c2"><span class="tk"><svg viewBox="0 0 26 26"><path d="M5 13 l5 5 l11-11" fill="none" stroke="#ffd60a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>STOKIN</div>
+            <div class="chip" id="c3"><span class="tk"><svg viewBox="0 0 26 26"><path d="M5 13 l5 5 l11-11" fill="none" stroke="#ffd60a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>BAJU</div>
+          </div>
+        </div>
+      </div>
+      <!-- G4 hotel 6.76–9.64 -->
+      <div id="g4" class="layer clip" data-start="7.89" data-duration="2.64">
+        <div class="top">
+          <div id="hotelCard">
+            <svg width="110" height="110" viewBox="0 0 110 110"><rect x="18" y="14" width="74" height="90" rx="6" fill="#ffd60a"/><g fill="#111"><rect x="30" y="26" width="14" height="12"/><rect x="66" y="26" width="14" height="12"/><rect x="30" y="46" width="14" height="12"/><rect x="66" y="46" width="14" height="12"/><rect x="30" y="66" width="14" height="12"/><rect x="66" y="66" width="14" height="12"/><rect x="46" y="82" width="18" height="22"/></g></svg>
+            <div class="A">Duduk hotel?</div>
+          </div>
+          <div><div id="susah"><div class="A">Susah nak kering!</div></div></div>
+        </div>
+      </div>
+      <!-- G5 steps 9.64–13.57 -->
+      <div id="g5" class="layer clip" data-start="10.54" data-duration="2.54">
+        <div class="top"><div id="stepsHead" class="A sh">Cara guna</div>
+          <div class="steps">
+            <div class="step" id="st1"><div class="n">1</div><div class="t">LETAK KASUT</div></div>
+            <div class="step" id="st2"><div class="n">2</div><div class="t">SET TIMER</div></div>
+            <div class="step" id="st3"><div class="n">3</div><div class="t">TINGGAL JE!</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- G6 problems -->
+      <div id="g6a" class="layer clip" data-start="13.06" data-duration="2.04">
+        <div class="top"><div class="prob"><svg viewBox="0 0 110 110"><path d="M55 10 C 35 40 22 58 22 74 a33 33 0 0 0 66 0 C 88 58 75 40 55 10z" fill="#3aa0ff" stroke="#fff" stroke-width="5"/><path d="M40 76 a15 15 0 0 0 15 15" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg><div class="A">Kasut lembab</div></div></div>
+      </div>
+      <div id="g6b" class="layer clip" data-start="15.11" data-duration="1.20">
+        <div class="top"><div class="prob"><svg viewBox="0 0 110 110"><path d="M38 14 L20 24 L10 46 L26 52 L28 98 H82 L84 52 L100 46 L90 24 L72 14 Q55 30 38 14Z" fill="#dfe8f7" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><g fill="#3aa0ff"><path d="M45 50 q6 12 0 18 q-6-6 0-18z"/><path d="M64 62 q6 12 0 18 q-6-6 0-18z"/><path d="M52 78 q5 10 0 15 q-5-5 0-15z"/></g></svg><div class="A">Baju basah</div></div></div>
+      </div>
+      <div id="g6c" class="layer clip" data-start="16.31" data-duration="0.85">
+        <div class="top"><div class="prob"><svg viewBox="0 0 110 110"><path d="M30 64 a22 22 0 0 1 4-43 a29 29 0 0 1 53 9 a19 19 0 0 1 2 38 z" fill="#dfe8f7"/><g stroke="#3aa0ff" stroke-width="6" stroke-linecap="round"><path d="M36 78 l-6 16"/><path d="M56 78 l-6 16"/><path d="M76 78 l-6 16"/></g></svg><div class="A">Musim hujan</div></div></div>
+      </div>
+      <!-- G7 30 minit 19.02–20.62 -->
+      <div id="g7" class="layer clip" data-start="17.16" data-duration="2.11">
+        <div class="top"><div id="m30"><div class="A">30</div><div class="u">MINIT</div></div><div id="kering"><span class="pill py">DAH KERING &#10003;</span></div></div>
+      </div>
+      <!-- G8 120 20.62–22.89 -->
+      <div id="g8" class="layer clip" data-start="19.27" data-duration="2.77">
+        <div class="top">
+          <div id="dialWrap"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="178" fill="rgba(8,10,20,0.86)"/><circle cx="200" cy="200" r="160" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="24"/><circle id="dialArc" cx="200" cy="200" r="160" fill="none" stroke="#ffd60a" stroke-width="24" stroke-linecap="round" transform="rotate(-90 200 200)" stroke-dasharray="1005.3" stroke-dashoffset="1005.3"/></svg>
+            <div id="dialC"><div id="dialNum">0</div><div id="dialU">MINIT</div></div></div>
+          <div id="maxLbl"><span class="pill pd">MAKSIMUM 120 MINIT</span></div>
+        </div>
+      </div>
+      <!-- G9 48C 22.89–25.67 -->
+      <div id="g9" class="layer clip" data-start="22.04" data-duration="2.60">
+        <div class="top">
+          <div id="tempBadge"><svg width="64" height="160" viewBox="0 0 70 170"><rect x="22" y="6" width="26" height="120" rx="13" fill="none" stroke="#fff" stroke-width="6"/><rect id="merc" x="29" y="40" width="12" height="90" rx="6" fill="#ff6a1a"/><circle cx="35" cy="140" r="26" fill="#ff6a1a" stroke="#fff" stroke-width="6"/></svg><div id="tempNum">0</div><div id="tempU">&deg;C</div></div>
+          <div id="lockRow"><svg width="84" height="100" viewBox="0 0 92 110"><path id="shackle" d="M22 52 V32 a24 24 0 0 1 48 0 V52" fill="none" stroke="#ffd60a" stroke-width="12" stroke-linecap="round"/><rect x="8" y="50" width="76" height="58" rx="12" fill="#ffd60a"/><circle cx="46" cy="75" r="8" fill="#111"/><rect x="42" y="78" width="8" height="16" rx="3" fill="#111"/></svg><div class="A sh">Suhu <span>locked</span></div></div>
+        </div>
+      </div>
+      <!-- G10 kain selamat 25.67–27.39 -->
+      <div id="g10" class="layer clip" data-start="24.64" data-duration="2.48">
+        <div class="top">
+          <svg id="shield" viewBox="0 0 210 240"><path d="M105 10 L190 42 V112 C190 170 152 210 105 230 C58 210 20 170 20 112 V42 Z" fill="#2bd96b" stroke="#fff" stroke-width="10" stroke-linejoin="round"/><path id="shCheck" d="M62 120 l30 30 l58-62" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="160" stroke-dashoffset="160"/></svg>
+          <div id="safeLbl" class="A sh">Kain <span>tak rosak</span></div>
+        </div>
+      </div>
+      <!-- G10b saiz kecil 27.12–30.30 (Task 2) -->
+      <div id="g10b" class="layer clip" data-start="27.12" data-duration="3.18">
+        <div class="top">
+          <div id="smallCard"><svg viewBox="0 0 120 120" width="120" height="120"><rect x="34" y="34" width="52" height="52" rx="10" fill="#ffd60a"/><g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30 V8 H30"/><path d="M8 8 L30 30"/><path d="M112 90 V112 H90"/><path d="M112 112 L90 90"/></g></svg><div class="A">Saiz kecil je!</div></div>
+          <div id="mana"><span class="pill py"><svg viewBox="0 0 40 40" width="40" height="40" style="vertical-align:-8px;margin-right:10px"><rect x="5" y="12" width="30" height="24" rx="5" fill="#111"/><path d="M14 12 V7 h12 v5" fill="none" stroke="#111" stroke-width="4"/></svg>BAWA KE MANA-MANA</span></div>
+        </div>
+      </div>
+      <!-- G11 harga 27.39–29.70 -->
+      <div id="g11" class="layer clip" data-start="30.30" data-duration="2.48">
+        <div class="top">
+          <div id="burst"><svg viewBox="0 0 560 560"><polygon id="star" fill="#ffd60a" stroke="#111" stroke-width="8" points=""/></svg>
+            <div id="burstTxt"><div class="a">Harga</div><div class="b">Murah<br />gila!</div></div></div>
+        </div>
+        <div id="rugi"><div class="A">Rugi tak grab!</div></div>
+      </div>
+      <!-- G12 CTA 29.70–33 -->
+      <div id="g12" class="layer clip" data-start="32.96" data-duration="3.46">
+        <div class="top" id="naik"><div class="box"><div class="A">Sebelum<br />harga naik!</div></div></div>
+      </div>
+      <div id="g13" class="layer clip" data-start="34.23" data-duration="2.19">
+        <div id="ctaCard"><div class="card"><div class="A">Check out sekarang</div><div class="w">kat <b>beg kuning</b> bawah ni</div></div></div>
+        <svg id="bag" viewBox="0 0 170 170"><path d="M52 62 V48 a33 33 0 0 1 66 0 V62" fill="none" stroke="#111" stroke-width="11" stroke-linecap="round"/><path d="M22 58 H148 L138 158 H32 Z" fill="#ffd60a" stroke="#111" stroke-width="9" stroke-linejoin="round"/><path d="M60 98 a25 25 0 0 0 50 0" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/></svg>
+        <svg id="arrows" viewBox="0 0 120 200"><path class="ar" d="M15 20 L60 60 L105 20" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 80 L60 120 L105 80" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 140 L60 180 L105 140" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="cap clip" id="cap0" data-start="0.000" data-duration="0.760"><span class="cw" id="w0_0">Kalau</span> <span class="cw" id="w0_1">korang</span> <span class="cw" id="w0_2">rajin</span></div>
+      <div class="cap clip" id="cap1" data-start="0.760" data-duration="1.100"><span class="cw" id="w1_0">pergi</span> <span class="cw emph" id="w1_1">travel</span></div>
+      <div class="cap clip" id="cap2" data-start="1.860" data-duration="1.020"><span class="cw" id="w2_0">pengering</span> <span class="cw emph" id="w2_1">portable</span> <span class="cw" id="w2_2">ni</span> <span class="cw" id="w2_3">memang</span></div>
+      <div class="cap clip" id="cap3" data-start="2.880" data-duration="0.840"><span class="cw emph" id="w3_0">wajib</span> <span class="cw" id="w3_1">korang</span> <span class="cw" id="w3_2">bawa</span></div>
+      <div class="cap clip" id="cap4" data-start="3.720" data-duration="1.620"><span class="cw emph" id="w4_0">Senang</span> <span class="cw" id="w4_1">nak</span> <span class="cw" id="w4_2">keringkan</span> <span class="cw emph" id="w4_3">kasut</span></div>
+      <div class="cap clip" id="cap5" data-start="5.340" data-duration="1.360"><span class="cw emph" id="w5_0">stokin</span> <span class="cw" id="w5_1">ataupun</span> <span class="cw emph" id="w5_2">baju</span></div>
+      <div class="cap clip" id="cap6" data-start="6.700" data-duration="1.160"><span class="cw" id="w6_0">korang</span> <span class="cw" id="w6_1">anytime</span> <span class="cw" id="w6_2">je</span></div>
+      <div class="cap clip" id="cap7" data-start="7.860" data-duration="0.600"><span class="cw" id="w7_0">Kalau</span> <span class="cw" id="w7_1">duduk</span> <span class="cw" id="w7_2">ke</span></div>
+      <div class="cap clip" id="cap8" data-start="8.460" data-duration="0.800"><span class="cw emph" id="w8_0">hotel</span> <span class="cw" id="w8_1">tu</span></div>
+      <div class="cap clip" id="cap9" data-start="9.260" data-duration="0.540"><span class="cw emph" id="w9_0">susah</span> <span class="cw" id="w9_1">tau</span> <span class="cw" id="w9_2">nak</span></div>
+      <div class="cap clip" id="cap10" data-start="9.800" data-duration="0.800"><span class="cw" id="w10_0">keringkan</span> <span class="cw" id="w10_1">pakaian</span></div>
+      <div class="cap clip" id="cap11" data-start="10.600" data-duration="0.680"><span class="cw" id="w11_0">So</span> <span class="cw" id="w11_1">korang</span> <span class="cw" id="w11_2">set</span></div>
+      <div class="cap clip" id="cap12" data-start="11.280" data-duration="0.880"><span class="cw" id="w12_0">je</span> <span class="cw" id="w12_1">timer</span> <span class="cw" id="w12_2">ni</span></div>
+      <div class="cap clip" id="cap13" data-start="12.160" data-duration="0.760"><span class="cw" id="w13_0">lepas</span> <span class="cw" id="w13_1">tu</span> <span class="cw emph" id="w13_2">tinggal</span> <span class="cw" id="w13_3">je</span></div>
+      <div class="cap clip" id="cap14" data-start="12.920" data-duration="1.100"><span class="cw" id="w14_0">Untuk</span> <span class="cw" id="w14_1">kasut</span> <span class="cw" id="w14_2">yang</span> <span class="cw" id="w14_3">lembab</span></div>
+      <div class="cap clip" id="cap15" data-start="14.020" data-duration="1.500"><span class="cw" id="w15_0">terkena</span> <span class="cw" id="w15_1">lopak</span> <span class="cw" id="w15_2">air</span> <span class="cw" id="w15_3">ataupun</span></div>
+      <div class="cap clip" id="cap16" data-start="15.520" data-duration="0.940"><span class="cw" id="w16_0">tudung</span> <span class="cw emph" id="w16_1">baju</span> <span class="cw" id="w16_2">korang</span> <span class="cw" id="w16_3">kena</span></div>
+      <div class="cap clip" id="cap17" data-start="16.460" data-duration="0.700"><span class="cw" id="w17_0">air</span> <span class="cw" id="w17_1">hujan</span> <span class="cw" id="w17_2">kan</span></div>
+      <div class="cap clip" id="cap18" data-start="17.160" data-duration="0.780"><span class="cw" id="w18_0">Korang</span> <span class="cw" id="w18_1">set</span> <span class="cw" id="w18_2">je</span></div>
+      <div class="cap clip" id="cap19" data-start="17.940" data-duration="0.600"><span class="cw emph" id="w19_0">30</span> <span class="cw emph" id="w19_1">minit</span> <span class="cw" id="w19_2">pun</span></div>
+      <div class="cap clip" id="cap20" data-start="18.540" data-duration="0.660"><span class="cw" id="w20_0">dah</span> <span class="cw emph" id="w20_1">kering</span> <span class="cw" id="w20_2">dah</span></div>
+      <div class="cap clip" id="cap21" data-start="19.200" data-duration="1.460"><span class="cw" id="w21_0">Maximum</span> <span class="cw" id="w21_1">korang</span> <span class="cw" id="w21_2">boleh</span> <span class="cw" id="w21_3">set</span></div>
+      <div class="cap clip" id="cap22" data-start="20.660" data-duration="1.380"><span class="cw" id="w22_0">selama</span> <span class="cw emph" id="w22_1">120</span> <span class="cw emph" id="w22_2">minit</span></div>
+      <div class="cap clip" id="cap23" data-start="22.040" data-duration="1.060"><span class="cw" id="w23_0">Lagipun</span> <span class="cw" id="w23_1">suhu</span> <span class="cw" id="w23_2">dia</span> <span class="cw" id="w23_3">dah</span></div>
+      <div class="cap clip" id="cap24" data-start="23.100" data-duration="1.540"><span class="cw emph" id="w24_0">lock</span> <span class="cw" id="w24_1">pada</span> <span class="cw emph" id="w24_2">48°C</span> <span class="cw" id="w24_3">tau</span></div>
+      <div class="cap clip" id="cap25" data-start="24.640" data-duration="0.820"><span class="cw" id="w25_0">So</span> <span class="cw" id="w25_1">kain</span> <span class="cw" id="w25_2">korang</span> <span class="cw" id="w25_3">tu</span></div>
+      <div class="cap clip" id="cap26" data-start="25.460" data-duration="1.080"><span class="cw" id="w26_0">tak</span> <span class="cw" id="w26_1">akan</span> <span class="cw emph" id="w26_2">rosak</span> <span class="cw" id="w26_3">punya</span></div>
+      <div class="cap clip" id="cap27" data-start="26.540" data-duration="0.580"><span class="cw" id="w27_0">jangan</span> <span class="cw" id="w27_1">risau</span></div>
+      <div class="cap clip" id="cap28" data-start="27.120" data-duration="0.880"><span class="cw" id="w28_0">Dan</span> <span class="cw" id="w28_1">yang</span> <span class="cw" id="w28_2">paling</span> <span class="cw" id="w28_3">best</span></div>
+      <div class="cap clip" id="cap29" data-start="28.000" data-duration="0.760"><span class="cw" id="w29_0">saiz</span> <span class="cw" id="w29_1">dia</span> <span class="cw" id="w29_2">kecil</span> <span class="cw" id="w29_3">je</span></div>
+      <div class="cap clip" id="cap30" data-start="28.760" data-duration="0.640"><span class="cw emph" id="w30_0">Senang</span> <span class="cw" id="w30_1">korang</span> <span class="cw" id="w30_2">nak</span></div>
+      <div class="cap clip" id="cap31" data-start="29.400" data-duration="0.900"><span class="cw" id="w31_0">bawa</span> <span class="cw" id="w31_1">pergi</span> <span class="cw" id="w31_2">mana-mana</span></div>
+      <div class="cap clip" id="cap32" data-start="30.300" data-duration="0.800"><span class="cw" id="w32_0">Harga</span> <span class="cw" id="w32_1">pun</span> <span class="cw" id="w32_2">tengah</span> <span class="cw emph" id="w32_3">murah</span></div>
+      <div class="cap clip" id="cap33" data-start="31.100" data-duration="0.740"><span class="cw emph" id="w33_0">gila</span> <span class="cw" id="w33_1">tau</span> <span class="cw emph" id="w33_2">sekarang</span></div>
+      <div class="cap clip" id="cap34" data-start="31.840" data-duration="0.940"><span class="cw" id="w34_0">Rugi</span> <span class="cw" id="w34_1">korang</span> <span class="cw" id="w34_2">tak</span> <span class="cw emph" id="w34_3">grab</span></div>
+      <div class="cap clip" id="cap35" data-start="32.780" data-duration="1.443"><span class="cw" id="w35_0">So</span> <span class="cw" id="w35_1">sebelum</span> <span class="cw" id="w35_2">harga</span> <span class="cw emph" id="w35_3">naik</span></div>
+
+      <div id="flash" class="layer clip" data-start="0" data-duration="36.4"></div>
+
+      <audio id="vo" src="assets/audio/vo_original.m4a" data-start="0" data-duration="36.11" data-volume="1"></audio>
+      <audio id="s0" src="assets/sfx/impact.wav" data-start="0.0" data-duration="1.2" data-volume="0.135"></audio>
+      <audio id="s1" src="assets/sfx/whoosh.wav" data-start="0.066" data-duration="0.55" data-volume="0.135"></audio>
+      <audio id="s2" src="assets/sfx/swipe.wav" data-start="1.81" data-duration="0.3" data-volume="0.105"></audio>
+      <audio id="s3" src="assets/sfx/pop.wav" data-start="2.884" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s4" src="assets/sfx/swipe.wav" data-start="3.68" data-duration="0.3" data-volume="0.09"></audio>
+      <audio id="s5" src="assets/sfx/pop.wav" data-start="4.504" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s6" src="assets/sfx/pop.wav" data-start="5.346" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s7" src="assets/sfx/pop.wav" data-start="6.423" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s8" src="assets/sfx/whoosh.wav" data-start="7.697" data-duration="0.55" data-volume="0.105"></audio>
+      <audio id="s9" src="assets/sfx/impact.wav" data-start="9.256" data-duration="0.6" data-volume="0.09"></audio>
+      <audio id="s10" src="assets/sfx/swipe.wav" data-start="10.498" data-duration="0.3" data-volume="0.09"></audio>
+      <audio id="s11" src="assets/sfx/pop.wav" data-start="10.892" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s12" src="assets/sfx/pop.wav" data-start="11.16" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s13" src="assets/sfx/tick.wav" data-start="11.273" data-duration="0.05" data-volume="0.12"></audio>
+      <audio id="s14" src="assets/sfx/ding.wav" data-start="12.158" data-duration="1.4" data-volume="0.09"></audio>
+      <audio id="s15" src="assets/sfx/swipe.wav" data-start="12.769" data-duration="0.3" data-volume="0.09"></audio>
+      <audio id="s16" src="assets/sfx/pop.wav" data-start="13.785" data-duration="0.12" data-volume="0.12"></audio>
+      <audio id="s17" src="assets/sfx/swipe.wav" data-start="14.924" data-duration="0.3" data-volume="0.09"></audio>
+      <audio id="s18" src="assets/sfx/pop.wav" data-start="15.725" data-duration="0.12" data-volume="0.12"></audio>
+      <audio id="s19" src="assets/sfx/rain.wav" data-start="16.311" data-duration="2.3" data-volume="0.105"></audio>
+      <audio id="s20" src="assets/sfx/whoosh.wav" data-start="17.147" data-duration="0.55" data-volume="0.105"></audio>
+      <audio id="s21" src="assets/sfx/tick.wav" data-start="17.94" data-duration="0.05" data-volume="0.12"></audio>
+      <audio id="s22" src="assets/sfx/ding.wav" data-start="18.68" data-duration="1.3" data-volume="0.105"></audio>
+      <audio id="s23" src="assets/sfx/whoosh.wav" data-start="19.048" data-duration="0.55" data-volume="0.09"></audio>
+      <audio id="s24" src="assets/sfx/tick.wav" data-start="20.168" data-duration="0.05" data-volume="0.105"></audio>
+      <audio id="s25" src="assets/sfx/tick.wav" data-start="20.372" data-duration="0.05" data-volume="0.105"></audio>
+      <audio id="s26" src="assets/sfx/tick.wav" data-start="20.716" data-duration="0.05" data-volume="0.105"></audio>
+      <audio id="s27" src="assets/sfx/ding.wav" data-start="21.023" data-duration="1.3" data-volume="0.105"></audio>
+      <audio id="s28" src="assets/sfx/whoosh.wav" data-start="21.813" data-duration="0.55" data-volume="0.09"></audio>
+      <audio id="s29" src="assets/sfx/tick.wav" data-start="22.527" data-duration="0.05" data-volume="0.105"></audio>
+      <audio id="s30" src="assets/sfx/tick.wav" data-start="22.77" data-duration="0.05" data-volume="0.105"></audio>
+      <audio id="s31" src="assets/sfx/impact.wav" data-start="23.098" data-duration="0.6" data-volume="0.09"></audio>
+      <audio id="s32" src="assets/sfx/ding.wav" data-start="23.378" data-duration="1.3" data-volume="0.105"></audio>
+      <audio id="s33" src="assets/sfx/swipe.wav" data-start="24.584" data-duration="0.3" data-volume="0.09"></audio>
+      <audio id="s34" src="assets/sfx/pop.wav" data-start="25.661" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s35" src="assets/sfx/swipe.wav" data-start="26.891" data-duration="0.3" data-volume="0.09"></audio>
+      <audio id="s36" src="assets/sfx/kaching.wav" data-start="30.9" data-duration="1.3" data-volume="0.135"></audio>
+      <audio id="s37" src="assets/sfx/impact.wav" data-start="31.684" data-duration="1.0" data-volume="0.12"></audio>
+      <audio id="s38" src="assets/sfx/whoosh.wav" data-start="32.663" data-duration="0.55" data-volume="0.105"></audio>
+      <audio id="s39" src="assets/sfx/pop.wav" data-start="33.635" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s40" src="assets/sfx/riser.wav" data-start="33.267" data-duration="1.1" data-volume="0.075"></audio>
+      <audio id="s41" src="assets/sfx/impact.wav" data-start="34.296" data-duration="0.8" data-volume="0.105"></audio>
+      <audio id="s42" src="assets/sfx/pop.wav" data-start="35.375" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s43" src="assets/sfx/ding.wav" data-start="35.486" data-duration="0.8" data-volume="0.09"></audio>
+      <audio id="s44" src="assets/sfx/swipe.wav" data-start="27.08" data-duration="0.3" data-volume="0.105"></audio>
+      <audio id="s45" src="assets/sfx/pop.wav" data-start="28.0" data-duration="0.12" data-volume="0.135"></audio>
+      <audio id="s46" src="assets/sfx/whoosh.wav" data-start="28.72" data-duration="0.55" data-volume="0.105"></audio>
+      <audio id="s47" src="assets/sfx/ding.wav" data-start="29.4" data-duration="1.3" data-volume="0.09"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const punch = (s, t, f = 1.12, d = 0.3) => tl.fromTo(s, { scale: f }, { scale: 1, duration: d, ease: "power3.out" }, t);
+      const drift = (s, t, d) => tl.fromTo(s, { scale: 1 }, { scale: 1.07, duration: d, ease: "none", immediateRender: false }, t);
+      const flash = (t, a) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: 0.18, ease: "power2.out", immediateRender: false }, t);
+      const hl = (s, t, c) => {
+        tl.set(s, { className: c + " on" }, t);
+        tl.fromTo(s, { scale: 1.12 }, { scale: 1, duration: 0.18, ease: "back.out(3)", immediateRender: false }, t);
+      };
+      const pop = (s, t, extra = {}) => tl.from(s, Object.assign({ scale: 0.3, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, extra), t);
+
+      punch("#v0", 0.00); drift("#v0", 0.30, 1.56);
+      punch("#v1", 1.86); drift("#v1", 2.16, 1.56);
+      flash(1.86, 0.35);
+      punch("#v2", 3.72); drift("#v2", 4.02, 0.48);
+      flash(3.72, 0.35);
+      punch("#v3", 4.50); drift("#v3", 4.80, 0.54);
+      flash(4.50, 0.35);
+      punch("#v4", 5.35); drift("#v4", 5.65, 0.78);
+      flash(5.35, 0.35);
+      punch("#v5", 6.42); drift("#v5", 6.72, 1.17);
+      flash(6.42, 0.35);
+      punch("#v6", 7.90); drift("#v6", 8.20, 2.34);
+      flash(7.90, 0.35);
+      punch("#v7", 10.53); drift("#v7", 10.83, 0.33);
+      flash(10.53, 0.35);
+      punch("#v8", 11.16); drift("#v8", 11.46, 0.70);
+      flash(11.16, 0.35);
+      punch("#v9", 12.16); drift("#v9", 12.46, 0.61);
+      flash(12.16, 0.35);
+      punch("#v10", 13.07); drift("#v10", 13.37, 1.74);
+      flash(13.07, 0.35);
+      punch("#v11", 15.11); drift("#v11", 15.41, 0.90);
+      flash(15.11, 0.35);
+      punch("#v12", 16.31); drift("#v12", 16.61, 0.55);
+      flash(16.31, 0.35);
+      punch("#v13", 17.16); drift("#v13", 17.46, 1.81);
+      flash(17.16, 0.35);
+      punch("#v14", 19.27); drift("#v14", 19.57, 1.03);
+      flash(19.27, 0.35);
+      punch("#v15", 20.60); drift("#v15", 20.90, 1.14);
+      flash(20.60, 0.35);
+      punch("#v16", 22.04); drift("#v16", 22.34, 2.30);
+      flash(22.04, 0.35);
+      punch("#v17", 24.64); drift("#v17", 24.94, 2.18);
+      flash(24.64, 0.35);
+      punch("#v18", 27.12); drift("#v18", 27.42, 1.34);
+      flash(27.12, 0.35);
+      punch("#v19", 28.76); drift("#v19", 29.06, 1.24);
+      flash(28.76, 0.35);
+      punch("#v20", 30.30); drift("#v20", 30.60, 1.24);
+      flash(30.30, 0.35);
+      punch("#v21", 31.84); drift("#v21", 32.14, 0.82);
+      flash(31.84, 0.35);
+      punch("#v22", 32.96); drift("#v22", 33.26, 3.14);
+      flash(32.96, 0.35);
+
+      /* rain */
+      (function () {
+        const rain = document.getElementById("rain");
+        let seed = 7;
+        const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
+        for (let i = 0; i < 60; i++) {
+          const d = document.createElement("div");
+          d.className = "drop";
+          d.style.left = Math.round(rnd() * 1120 - 20) + "px";
+          d.style.height = Math.round(60 + rnd() * 110) + "px";
+          d.style.opacity = (0.35 + rnd() * 0.6).toFixed(2);
+          rain.appendChild(d);
+          const sp = 0.35 + rnd() * 0.3, off = rnd() * sp;
+          for (let r = 0; r < Math.ceil(2.7 / sp) + 1; r++)
+            tl.fromTo(d, { y: -220, x: 0, rotation: 12 }, { y: 2000, x: -120, rotation: 12, duration: sp, ease: "none", immediateRender: false }, Math.max(16.31, 16.81 + r * sp - off));
+        }
+      })();
+
+      /* G1 hook */
+      tl.fromTo("#hookA", { scale: 1.6, opacity: 0.0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power4.out" }, 0);
+      tl.fromTo("#planeG", { x: -100, y: 210, rotation: -20 }, { x: 760, y: 120, rotation: 8, duration: 1.1, ease: "power1.inOut" }, 0.13);
+      tl.from("#trail", { attr: { "stroke-dashoffset": 900 }, opacity: 0, duration: 1.1, ease: "power1.inOut" }, 0.13);
+      tl.to("#g1", { scale: 1.3, opacity: 0, duration: 0.14, ease: "power2.in" }, 1.71);
+      /* G2 */
+      tl.from("#hookB", { y: -80, scale: 0.6, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 1.88);
+      pop("#portable", 2.07);
+      tl.fromTo("#hookB", { scale: 1 }, { scale: 1.12, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, 2.88);
+      /* G3 */
+      tl.from("#chipsHead", { y: -50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 3.74);
+      tl.from(".chip", { y: -40, opacity: 0, duration: 0.25, stagger: 0.05, ease: "back.out(2)" }, 3.78);
+      [["#c1", 4.50], ["#c2", 5.34], ["#c3", 6.42]].forEach(([c, t]) => { tl.set(c, { className: "chip on" }, t); tl.fromTo(c, { scale: 1.35 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t); });
+      /* G4 hotel */
+      tl.from("#hotelCard", { x: -900, duration: 0.4, ease: "power4.out" }, 7.91);
+      tl.from("#susah .A", { scale: 2.6, opacity: 0, rotation: -12, duration: 0.3, ease: "power4.out" }, 9.26);
+      tl.to("#susah .A", { x: 10, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, 9.52);
+      /* G5 steps */
+      tl.from("#stepsHead", { y: -50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 10.62);
+      tl.from(".step", { x: 500, opacity: 0, duration: 0.3, stagger: 0.08, ease: "power3.out" }, 10.64);
+      [["#st1", 10.89], ["#st2", 11.16], ["#st3", 12.16]].forEach(([c, t]) => { tl.set(c, { className: "step on" }, t); tl.fromTo(c, { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t); });
+      /* G6 problems */
+      ["#g6a", "#g6b", "#g6c"].forEach((g, i) => pop(g + " .prob", [13.10, 15.12, 16.32][i], { x: -300, scale: 0.8 }));
+      tl.fromTo("#g6a svg", { y: -6 }, { y: 6, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false }, 13.59);
+      /* G7 30 minit */
+      pop("#m30", 17.20);
+      pop("#kering", 18.68, { y: 40 });
+      /* G8 dial */
+      tl.from("#dialWrap", { scale: 0.3, rotation: -90, opacity: 0, duration: 0.4, ease: "back.out(1.6)" }, 19.29);
+      const dial = { v: 0 };
+      tl.to(dial, { v: 120, duration: 1.1, ease: "power2.out", onUpdate: () => { document.getElementById("dialNum").textContent = Math.round(dial.v); } }, 19.76);
+      tl.to("#dialArc", { attr: { "stroke-dashoffset": 0 }, duration: 1.1, ease: "power2.out" }, 19.76);
+      pop("#maxLbl", 21.02, { y: 40 });
+      /* G9 temp */
+      tl.from("#tempBadge", { y: -260, opacity: 0, scale: 0.6, duration: 0.4, ease: "back.out(1.7)" }, 22.05);
+      const temp = { v: 0 };
+      tl.to(temp, { v: 48, duration: 1.0, ease: "power2.out", onUpdate: () => { document.getElementById("tempNum").textContent = Math.round(temp.v); } }, 22.38);
+      tl.fromTo("#merc", { attr: { y: 120, height: 10 } }, { attr: { y: 30, height: 100 }, duration: 1.0, ease: "power2.out" }, 22.38);
+      tl.from("#lockRow", { y: 70, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 22.89);
+      tl.fromTo("#shackle", { y: -22 }, { y: 0, duration: 0.16, ease: "power4.in", immediateRender: false }, 23.10);
+      tl.fromTo("#tempBadge", { boxShadow: "0 0 0 rgba(255,106,26,0)" }, { boxShadow: "0 0 70px rgba(255,106,26,0.9)", duration: 0.3, yoyo: true, repeat: 2, immediateRender: false }, 23.47);
+      /* G10 */
+      pop("#shield", 24.65);
+      tl.to("#shCheck", { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.out" }, 25.04);
+      tl.from("#safeLbl", { y: 50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 25.13);
+      /* G10b saiz kecil */
+      tl.from("#smallCard", { scale: 2.2, opacity: 0, duration: 0.3, ease: "power4.out" }, 27.14);
+      tl.fromTo("#smallCard svg", { scale: 1.3 }, { scale: 0.85, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false }, 27.5);
+      pop("#mana", 28.76, { y: 50 });
+      tl.fromTo("#mana .pill", { x: 0 }, { x: 18, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false }, 29.1);
+      /* G11 price burst */
+      (function () { const pts = []; for (let i = 0; i < 32; i++) { const a = (i / 32) * Math.PI * 2, r = i % 2 ? 210 : 265; pts.push((280 + r * Math.cos(a)).toFixed(1) + "," + (280 + r * Math.sin(a)).toFixed(1)); } document.getElementById("star").setAttribute("points", pts.join(" ")); })();
+      tl.from("#burst", { scale: 0, rotation: -60, duration: 0.45, ease: "back.out(1.8)" }, 30.41);
+      tl.to("#burst svg", { rotation: 30, duration: 2.2, ease: "none" }, 30.41);
+      tl.fromTo("#burstTxt .b", { scale: 1 }, { scale: 1.15, duration: 0.14, yoyo: true, repeat: 1, immediateRender: false }, 30.90);
+      tl.from("#rugi .A", { scale: 3, opacity: 0, duration: 0.25, ease: "power4.out" }, 31.68);
+      /* G12/13 CTA */
+      tl.from("#naik .box", { scale: 2.6, opacity: 0, rotation: -12, duration: 0.3, ease: "power4.out" }, 32.98);
+      tl.to("#naik .box", { rotation: 2, duration: 0.07, yoyo: true, repeat: 7, ease: "none" }, 33.64);
+      tl.from("#ctaCard", { y: 700, duration: 0.45, ease: "back.out(1.4)" }, 34.24);
+      tl.from("#bag", { scale: 0, rotation: -30, duration: 0.35, ease: "back.out(2.5)" }, 35.31);
+      tl.to("#bag", { y: -24, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 35.70);
+      tl.from("#arrows", { opacity: 0, duration: 0.15 }, 35.38);
+      tl.fromTo("#arrows .ar", { opacity: 0.15 }, { opacity: 1, duration: 0.15, stagger: 0.1, repeat: 3, yoyo: true, ease: "none", immediateRender: false }, 35.38);
+
+      /* captions */
+      hl("#w0_0", 0.000, "cw");
+      hl("#w0_1", 0.300, "cw");
+      hl("#w0_2", 0.480, "cw");
+      tl.from("#cap0", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 0.000);
+      hl("#w1_0", 0.760, "cw");
+      hl("#w1_1", 0.980, "cw emph");
+      tl.from("#cap1", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 0.760);
+      hl("#w2_0", 1.860, "cw");
+      hl("#w2_1", 2.000, "cw emph");
+      hl("#w2_2", 2.400, "cw");
+      hl("#w2_3", 2.700, "cw");
+      tl.from("#cap2", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 1.860);
+      hl("#w3_0", 2.880, "cw emph");
+      hl("#w3_1", 3.120, "cw");
+      hl("#w3_2", 3.300, "cw");
+      tl.from("#cap3", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 2.880);
+      hl("#w4_0", 3.720, "cw emph");
+      hl("#w4_1", 4.080, "cw");
+      hl("#w4_2", 4.240, "cw");
+      hl("#w4_3", 4.500, "cw emph");
+      tl.from("#cap4", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 3.720);
+      hl("#w5_0", 5.340, "cw emph");
+      hl("#w5_1", 6.060, "cw");
+      hl("#w5_2", 6.420, "cw emph");
+      tl.from("#cap5", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 5.340);
+      hl("#w6_0", 6.700, "cw");
+      hl("#w6_1", 7.080, "cw");
+      hl("#w6_2", 7.460, "cw");
+      tl.from("#cap6", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 6.700);
+      hl("#w7_0", 7.860, "cw");
+      hl("#w7_1", 8.140, "cw");
+      hl("#w7_2", 8.360, "cw");
+      tl.from("#cap7", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 7.860);
+      hl("#w8_0", 8.460, "cw emph");
+      hl("#w8_1", 8.740, "cw");
+      tl.from("#cap8", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 8.460);
+      hl("#w9_0", 9.260, "cw emph");
+      hl("#w9_1", 9.580, "cw");
+      hl("#w9_2", 9.680, "cw");
+      tl.from("#cap9", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 9.260);
+      hl("#w10_0", 9.800, "cw");
+      hl("#w10_1", 10.060, "cw");
+      tl.from("#cap10", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 9.800);
+      hl("#w11_0", 10.600, "cw");
+      hl("#w11_1", 10.900, "cw");
+      hl("#w11_2", 11.160, "cw");
+      tl.from("#cap11", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 10.600);
+      hl("#w12_0", 11.280, "cw");
+      hl("#w12_1", 11.400, "cw");
+      hl("#w12_2", 11.680, "cw");
+      tl.from("#cap12", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 11.280);
+      hl("#w13_0", 12.160, "cw");
+      hl("#w13_1", 12.240, "cw");
+      hl("#w13_2", 12.340, "cw emph");
+      hl("#w13_3", 12.700, "cw");
+      tl.from("#cap13", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 12.160);
+      hl("#w14_0", 12.920, "cw");
+      hl("#w14_1", 13.380, "cw");
+      hl("#w14_2", 13.640, "cw");
+      hl("#w14_3", 13.780, "cw");
+      tl.from("#cap14", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 12.920);
+      hl("#w15_0", 14.020, "cw");
+      hl("#w15_1", 14.300, "cw");
+      hl("#w15_2", 14.500, "cw");
+      hl("#w15_3", 14.960, "cw");
+      tl.from("#cap15", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 14.020);
+      hl("#w16_0", 15.520, "cw");
+      hl("#w16_1", 15.860, "cw emph");
+      hl("#w16_2", 16.120, "cw");
+      hl("#w16_3", 16.300, "cw");
+      tl.from("#cap16", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 15.520);
+      hl("#w17_0", 16.460, "cw");
+      hl("#w17_1", 16.600, "cw");
+      hl("#w17_2", 16.840, "cw");
+      tl.from("#cap17", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 16.460);
+      hl("#w18_0", 17.160, "cw");
+      hl("#w18_1", 17.660, "cw");
+      hl("#w18_2", 17.840, "cw");
+      tl.from("#cap18", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 17.160);
+      hl("#w19_0", 17.940, "cw emph");
+      hl("#w19_1", 18.160, "cw emph");
+      hl("#w19_2", 18.460, "cw");
+      tl.from("#cap19", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 17.940);
+      hl("#w20_0", 18.540, "cw");
+      hl("#w20_1", 18.680, "cw emph");
+      hl("#w20_2", 18.860, "cw");
+      tl.from("#cap20", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 18.540);
+      hl("#w21_0", 19.200, "cw");
+      hl("#w21_1", 19.680, "cw");
+      hl("#w21_2", 19.900, "cw");
+      hl("#w21_3", 20.080, "cw");
+      tl.from("#cap21", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 19.200);
+      hl("#w22_0", 20.660, "cw");
+      hl("#w22_1", 21.020, "cw emph");
+      hl("#w22_2", 21.360, "cw emph");
+      tl.from("#cap22", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 20.660);
+      hl("#w23_0", 22.040, "cw");
+      hl("#w23_1", 22.420, "cw");
+      hl("#w23_2", 22.740, "cw");
+      hl("#w23_3", 22.900, "cw");
+      tl.from("#cap23", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 22.040);
+      hl("#w24_0", 23.100, "cw emph");
+      hl("#w24_1", 23.200, "cw");
+      hl("#w24_2", 23.380, "cw emph");
+      hl("#w24_3", 24.340, "cw");
+      tl.from("#cap24", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 23.100);
+      hl("#w25_0", 24.640, "cw");
+      hl("#w25_1", 24.900, "cw");
+      hl("#w25_2", 25.100, "cw");
+      hl("#w25_3", 25.360, "cw");
+      tl.from("#cap25", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 24.640);
+      hl("#w26_0", 25.460, "cw");
+      hl("#w26_1", 25.600, "cw");
+      hl("#w26_2", 25.660, "cw emph");
+      hl("#w26_3", 26.000, "cw");
+      tl.from("#cap26", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 25.460);
+      hl("#w27_0", 26.540, "cw");
+      hl("#w27_1", 26.620, "cw");
+      tl.from("#cap27", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 26.540);
+      hl("#w28_0", 27.120, "cw");
+      hl("#w28_1", 27.360, "cw");
+      hl("#w28_2", 27.440, "cw");
+      hl("#w28_3", 27.620, "cw");
+      tl.from("#cap28", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 27.120);
+      hl("#w29_0", 28.000, "cw");
+      hl("#w29_1", 28.100, "cw");
+      hl("#w29_2", 28.200, "cw");
+      hl("#w29_3", 28.480, "cw");
+      tl.from("#cap29", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 28.000);
+      hl("#w30_0", 28.760, "cw emph");
+      hl("#w30_1", 29.140, "cw");
+      hl("#w30_2", 29.280, "cw");
+      tl.from("#cap30", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 28.760);
+      hl("#w31_0", 29.400, "cw");
+      hl("#w31_1", 29.500, "cw");
+      hl("#w31_2", 29.620, "cw");
+      tl.from("#cap31", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 29.400);
+      hl("#w32_0", 30.300, "cw");
+      hl("#w32_1", 30.640, "cw");
+      hl("#w32_2", 30.740, "cw");
+      hl("#w32_3", 30.900, "cw emph");
+      tl.from("#cap32", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 30.300);
+      hl("#w33_0", 31.100, "cw emph");
+      hl("#w33_1", 31.320, "cw");
+      hl("#w33_2", 31.420, "cw emph");
+      tl.from("#cap33", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 31.100);
+      hl("#w34_0", 31.840, "cw");
+      hl("#w34_1", 32.200, "cw");
+      hl("#w34_2", 32.400, "cw");
+      hl("#w34_3", 32.540, "cw emph");
+      tl.from("#cap34", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 31.840);
+      hl("#w35_0", 32.780, "cw");
+      hl("#w35_1", 33.120, "cw");
+      hl("#w35_2", 33.420, "cw");
+      hl("#w35_3", 33.640, "cw emph");
+      tl.from("#cap35", { y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 32.780);
+
+      /* explicit clip visibility (render-path independent) */
+      document.querySelectorAll("#root [data-start]:not(video):not(audio)").forEach((el) => {
+        const st = parseFloat(el.dataset.start), du = parseFloat(el.dataset.duration);
+        tl.set(el, { visibility: st > 0 ? "hidden" : "visible" }, 0);
+        if (st > 0) tl.set(el, { visibility: "visible" }, st);
+        if (st + du < 36.4 - 0.001) tl.set(el, { visibility: "hidden" }, st + du);
+      });
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
