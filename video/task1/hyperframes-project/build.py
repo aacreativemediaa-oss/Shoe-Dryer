@@ -1,15 +1,16 @@
 """Generates index.html for the Task 1 VO edit from words.json + scene plan."""
 import json, html, os
+from timemap import f as T
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-W0 = json.load(open(os.path.join(HERE, "words.json")))
+W0 = [[x[0], x[1], x[2].strip().replace("penggering", "pengering")] for s in json.load(open(os.path.join(HERE, "tx.json"))) for x in s["w"] if not (20.6 < x[0] < 20.7)]
 W = []
 for w in W0:
     if W and w[2].startswith("-"):
         W[-1] = [W[-1][0], w[1], W[-1][2] + w[2]]
     else:
         W.append(list(w))
-TOTAL = 33.0
+TOTAL = 37.0
 
 # (start, end, src, media_start)
 SCENES = [
@@ -41,7 +42,7 @@ EMPH = {"travel,", "wajib", "portable", "hotel", "susah", "30", "minit", "120", 
 
 # ---------- caption chunks (split on VO sentence boundaries, <=4 words, balanced) ----------
 import math
-SENT = [0, 3.24, 6.76, 9.64, 10.93, 13.57, 16.81, 19.02, 20.62, 22.89, 25.67, 27.39, 28.86, 29.70]
+SENT = [s["w"][0][0] for s in json.load(open(os.path.join(HERE, "tx.json")))]
 sents, cur = [], []
 for w in W:
     if cur and any(abs(w[0] - s) < 0.06 for s in SENT):
@@ -66,8 +67,8 @@ for s in phr:
     for z in sizes:
         chunks.append(s[i:i + z]); i += z
 cap_html, cap_js = [], []
-chunks = [c for c in chunks if c[0][0] < 31.0]
-CAP_END = 31.0
+chunks = [c for c in chunks if c[0][0] < T(31.0)]
+CAP_END = T(31.0)
 for ci, c in enumerate(chunks):
     st = c[0][0]
     en = chunks[ci + 1][0][0] if ci + 1 < len(chunks) else CAP_END
@@ -81,6 +82,17 @@ for ci, c in enumerate(chunks):
                     + " ".join(spans) + "</div>")
     cap_js.append(f'tl.from("#cap{ci}", {{ y: 24, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }}, {st:.3f});')
 
+SCENES = [(T(s), (TOTAL if e >= 33.0 else T(e)), src, ms) for s, e, src, ms in SCENES]
+# original-VO timing tweaks: box front only lasts 2.2s; knob shot starts a little earlier
+_s = []
+for s, e, src, ms in SCENES:
+    if src == "lv0" and ms == 10.0:
+        _s += [(s, 32.56, src, 10.0), (32.56, e, "lv0", 57.4)]
+    elif src == "lv0" and ms == 54.6:
+        _s.append((s, e, src, 54.5))
+    else:
+        _s.append((s, e, src, ms))
+SCENES = _s
 vid_html, vid_js = [], []
 for i, (s, e, src, ms) in enumerate(SCENES):
     vid_html.append(f'<video id="v{i}" class="clip" src="assets/video/{src}.mp4" data-start="{s:.2f}" '
@@ -90,6 +102,7 @@ for i, (s, e, src, ms) in enumerate(SCENES):
         vid_js.append(f'flash({s:.2f}, 0.35);')
 
 # ---------- SFX ----------
+SFX_GAIN = 0.3  # original VO is quiet and must stay untouched, so SFX sit lower
 SFX = [  # (file, start, dur, vol)
     ("impact", 0.0, 1.2, 0.45), ("whoosh", 0.05, 0.55, 0.45),
     ("swipe", 1.35, 0.3, 0.35), ("pop", 2.48, 0.12, 0.45),
@@ -109,8 +122,8 @@ SFX = [  # (file, start, dur, vol)
     ("whoosh", 29.66, 0.55, 0.35), ("pop", 30.36, 0.12, 0.45), ("riser", 30.0, 1.1, 0.25),
     ("impact", 31.08, 0.8, 0.35), ("pop", 32.06, 0.12, 0.5), ("ding", 32.16, 0.8, 0.3),
 ]
-sfx_html = [f'<audio id="s{i}" src="assets/sfx/{f}.wav" data-start="{s}" data-duration="{d}" data-volume="{v}"></audio>'
-            for i, (f, s, d, v) in enumerate(SFX)]
+sfx_html = [f'<audio id="s{i}" src="assets/sfx/{f}.wav" data-start="{s}" data-duration="{d}" data-volume="{round(v * SFX_GAIN, 3)}"></audio>'
+            for i, (f, s, d, v) in enumerate([(a, round(T(s0), 3), dd, vv) for a, s0, dd, vv in SFX])]
 
 tpl = open(os.path.join(HERE, "template.tpl")).read()
 out = (tpl.replace("<!--VIDEOS-->", "\n      ".join(vid_html))

@@ -29,7 +29,7 @@
 
       /* captions */
       .cap { top: 1060px; bottom: auto; left: 100px; right: 190px; height: auto; text-align: center; font-weight: 900; font-size: 62px; line-height: 1.12; text-transform: uppercase; }
-      .cw { display: inline-block; color: #fff; -webkit-text-stroke: 10px #000; paint-order: stroke fill; text-shadow: 0 8px 18px rgba(0,0,0,0.55); transform-origin: 50% 60%; }
+      .cw { display: inline-block; margin: 0 0.1em; color: #fff; -webkit-text-stroke: 10px #000; paint-order: stroke fill; text-shadow: 0 8px 18px rgba(0,0,0,0.55); transform-origin: 50% 60%; }
       .cw.emph.on { color: var(--yellow); }
 
       /* hook */
@@ -119,11 +119,11 @@
 
       <div id="vig" class="layer clip" data-start="0" data-duration="__TOTAL__"></div>
       <div id="shade" class="layer clip" data-start="0" data-duration="__TOTAL__"></div>
-      <div id="rainTint" class="layer clip" data-start="16.81" data-duration="2.21"></div>
-      <div id="rain" data-layout-allow-overflow class="layer clip" data-start="16.81" data-duration="2.21"></div>
+      <div id="rainTint" class="layer clip" data-start="19.25" data-duration="2.47"></div>
+      <div id="rain" data-layout-allow-overflow class="layer clip" data-start="19.25" data-duration="2.47"></div>
 
       <!-- G1 hook 0–1.40 -->
-      <div id="g1" class="layer clip" data-start="0" data-duration="1.4">
+      <div id="g1" class="layer clip" data-start="0.00" data-duration="1.56">
         <div class="top"><div id="hookA" class="A sh">Kaki travel?</div></div>
         <svg id="plane" viewBox="0 0 1080 260">
           <path id="trail" d="M-40 210 Q 380 40 760 120" fill="none" stroke="#ffd60a" stroke-width="8" stroke-dasharray="22 18" stroke-linecap="round" />
@@ -131,11 +131,11 @@
         </svg>
       </div>
       <!-- G2 portable 1.40–3.24 -->
-      <div id="g2" class="layer clip" data-start="1.4" data-duration="1.84">
+      <div id="g2" class="layer clip" data-start="1.56" data-duration="1.84">
         <div class="top"><div id="hookB" class="A sh">Wajib bawa<br />benda ni!</div><div id="portable"><span class="pill py">PENGERING PORTABLE</span></div></div>
       </div>
       <!-- G3 kasut/stokin/baju 3.24–6.76 -->
-      <div id="g3" class="layer clip" data-start="3.24" data-duration="3.52">
+      <div id="g3" class="layer clip" data-start="3.40" data-duration="3.89">
         <div class="top"><div id="chipsHead" class="A sh">Senang nak keringkan</div>
           <div class="chips">
             <div class="chip" id="c1"><span class="tk"><svg viewBox="0 0 26 26"><path d="M5 13 l5 5 l11-11" fill="none" stroke="#ffd60a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>KASUT</div>
@@ -145,7 +145,7 @@
         </div>
       </div>
       <!-- G4 hotel 6.76–9.64 -->
-      <div id="g4" class="layer clip" data-start="6.76" data-duration="2.88">
+      <div id="g4" class="layer clip" data-start="7.29" data-duration="2.99">
         <div class="top">
           <div id="hotelCard">
             <svg width="110" height="110" viewBox="0 0 110 110"><rect x="18" y="14" width="74" height="90" rx="6" fill="#ffd60a"/><g fill="#111"><rect x="30" y="26" width="14" height="12"/><rect x="66" y="26" width="14" height="12"/><rect x="30" y="46" width="14" height="12"/><rect x="66" y="46" width="14" height="12"/><rect x="30" y="66" width="14" height="12"/><rect x="66" y="66" width="14" height="12"/><rect x="46" y="82" width="18" height="22"/></g></svg>
@@ -155,7 +155,7 @@
         </div>
       </div>
       <!-- G5 steps 9.64–13.57 -->
-      <div id="g5" class="layer clip" data-start="9.64" data-duration="3.93">
+      <div id="g5" class="layer clip" data-start="10.29" data-duration="5.27">
         <div class="top"><div id="stepsHead" class="A sh">Cara guna</div>
           <div class="steps">
             <div class="step" id="st1"><div class="n">1</div><div class="t">LETAK KASUT</div></div>
@@ -165,21 +165,21 @@
         </div>
       </div>
       <!-- G6 problems -->
-      <div id="g6a" class="layer clip" data-start="13.57" data-duration="1.61">
+      <div id="g6a" class="layer clip" data-start="15.55" data-duration="1.83">
         <div class="top"><div class="prob"><svg viewBox="0 0 110 110"><path d="M55 10 C 35 40 22 58 22 74 a33 33 0 0 0 66 0 C 88 58 75 40 55 10z" fill="#3aa0ff" stroke="#fff" stroke-width="5"/><path d="M40 76 a15 15 0 0 0 15 15" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg><div class="A">Kasut lembab</div></div></div>
       </div>
-      <div id="g6b" class="layer clip" data-start="15.18" data-duration="1.63">
+      <div id="g6b" class="layer clip" data-start="17.39" data-duration="1.86">
         <div class="top"><div class="prob"><svg viewBox="0 0 110 110"><path d="M26 22 H84 L76 98 H34 Z" fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"/><path d="M31 48 H79 L75 92 H35 Z" fill="#c07a3a"/><path d="M62 8 L54 30" stroke="#ff2d3d" stroke-width="7" stroke-linecap="round"/></svg><div class="A">Tumpah air</div></div></div>
       </div>
-      <div id="g6c" class="layer clip" data-start="16.81" data-duration="2.21">
+      <div id="g6c" class="layer clip" data-start="19.25" data-duration="2.47">
         <div class="top"><div class="prob"><svg viewBox="0 0 110 110"><path d="M30 64 a22 22 0 0 1 4-43 a29 29 0 0 1 53 9 a19 19 0 0 1 2 38 z" fill="#dfe8f7"/><g stroke="#3aa0ff" stroke-width="6" stroke-linecap="round"><path d="M36 78 l-6 16"/><path d="M56 78 l-6 16"/><path d="M76 78 l-6 16"/></g></svg><div class="A">Musim hujan</div></div></div>
       </div>
       <!-- G7 30 minit 19.02–20.62 -->
-      <div id="g7" class="layer clip" data-start="19.02" data-duration="1.6">
+      <div id="g7" class="layer clip" data-start="21.72" data-duration="1.77">
         <div class="top"><div id="m30"><div class="A">30</div><div class="u">MINIT</div></div><div id="kering"><span class="pill py">DAH KERING &#10003;</span></div></div>
       </div>
       <!-- G8 120 20.62–22.89 -->
-      <div id="g8" class="layer clip" data-start="20.62" data-duration="2.27">
+      <div id="g8" class="layer clip" data-start="23.49" data-duration="2.55">
         <div class="top">
           <div id="dialWrap"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="178" fill="rgba(8,10,20,0.86)"/><circle cx="200" cy="200" r="160" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="24"/><circle id="dialArc" cx="200" cy="200" r="160" fill="none" stroke="#ffd60a" stroke-width="24" stroke-linecap="round" transform="rotate(-90 200 200)" stroke-dasharray="1005.3" stroke-dashoffset="1005.3"/></svg>
             <div id="dialC"><div id="dialNum">0</div><div id="dialU">MINIT</div></div></div>
@@ -187,21 +187,21 @@
         </div>
       </div>
       <!-- G9 48C 22.89–25.67 -->
-      <div id="g9" class="layer clip" data-start="22.89" data-duration="2.78">
+      <div id="g9" class="layer clip" data-start="26.04" data-duration="2.78">
         <div class="top">
           <div id="tempBadge"><svg width="64" height="160" viewBox="0 0 70 170"><rect x="22" y="6" width="26" height="120" rx="13" fill="none" stroke="#fff" stroke-width="6"/><rect id="merc" x="29" y="40" width="12" height="90" rx="6" fill="#ff6a1a"/><circle cx="35" cy="140" r="26" fill="#ff6a1a" stroke="#fff" stroke-width="6"/></svg><div id="tempNum">0</div><div id="tempU">&deg;C</div></div>
           <div id="lockRow"><svg width="84" height="100" viewBox="0 0 92 110"><path id="shackle" d="M22 52 V32 a24 24 0 0 1 48 0 V52" fill="none" stroke="#ffd60a" stroke-width="12" stroke-linecap="round"/><rect x="8" y="50" width="76" height="58" rx="12" fill="#ffd60a"/><circle cx="46" cy="75" r="8" fill="#111"/><rect x="42" y="78" width="8" height="16" rx="3" fill="#111"/></svg><div class="A sh">Suhu <span>locked</span></div></div>
         </div>
       </div>
       <!-- G10 kain selamat 25.67–27.39 -->
-      <div id="g10" class="layer clip" data-start="25.67" data-duration="1.72">
+      <div id="g10" class="layer clip" data-start="28.82" data-duration="2.10">
         <div class="top">
           <svg id="shield" viewBox="0 0 210 240"><path d="M105 10 L190 42 V112 C190 170 152 210 105 230 C58 210 20 170 20 112 V42 Z" fill="#2bd96b" stroke="#fff" stroke-width="10" stroke-linejoin="round"/><path id="shCheck" d="M62 120 l30 30 l58-62" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="160" stroke-dashoffset="160"/></svg>
           <div id="safeLbl" class="A sh">Kain <span>tak rosak</span></div>
         </div>
       </div>
       <!-- G11 harga 27.39–29.70 -->
-      <div id="g11" class="layer clip" data-start="27.39" data-duration="2.31">
+      <div id="g11" class="layer clip" data-start="30.92" data-duration="2.80">
         <div class="top">
           <div id="burst"><svg viewBox="0 0 560 560"><polygon id="star" fill="#ffd60a" stroke="#111" stroke-width="8" points=""/></svg>
             <div id="burstTxt"><div class="a">Harga</div><div class="b">Murah<br />gila!</div></div></div>
@@ -209,10 +209,10 @@
         <div id="rugi"><div class="A">Rugi tak grab!</div></div>
       </div>
       <!-- G12 CTA 29.70–33 -->
-      <div id="g12" class="layer clip" data-start="29.7" data-duration="3.3">
+      <div id="g12" class="layer clip" data-start="33.72" data-duration="3.30">
         <div class="top" id="naik"><div class="box"><div class="A">Sebelum<br />harga naik!</div></div></div>
       </div>
-      <div id="g13" class="layer clip" data-start="31.0" data-duration="2.0">
+      <div id="g13" class="layer clip" data-start="35.02" data-duration="2.00">
         <div id="ctaCard"><div class="card"><div class="A">Check out sekarang</div><div class="w">kat <b>beg kuning</b> bawah ni</div></div></div>
         <svg id="bag" viewBox="0 0 170 170"><path d="M52 62 V48 a33 33 0 0 1 66 0 V62" fill="none" stroke="#111" stroke-width="11" stroke-linecap="round"/><path d="M22 58 H148 L138 158 H32 Z" fill="#ffd60a" stroke="#111" stroke-width="9" stroke-linejoin="round"/><path d="M60 98 a25 25 0 0 0 50 0" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/></svg>
         <svg id="arrows" viewBox="0 0 120 200"><path class="ar" d="M15 20 L60 60 L105 20" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 80 L60 120 L105 80" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 140 L60 180 L105 140" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -222,7 +222,7 @@
 
       <div id="flash" class="layer clip" data-start="0" data-duration="__TOTAL__"></div>
 
-      <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="32.72" data-volume="1"></audio>
+      <audio id="vo" src="assets/audio/vo_original.m4a" data-start="0" data-duration="36.73" data-volume="1"></audio>
       <!--SFX-->
     </div>
 
@@ -253,70 +253,70 @@
           d.style.opacity = (0.35 + rnd() * 0.6).toFixed(2);
           rain.appendChild(d);
           const sp = 0.35 + rnd() * 0.3, off = rnd() * sp;
-          for (let r = 0; r < Math.ceil(2.4 / sp) + 1; r++)
-            tl.fromTo(d, { y: -220, x: 0, rotation: 12 }, { y: 2000, x: -120, rotation: 12, duration: sp, ease: "none", immediateRender: false }, Math.max(16.81, 16.81 + r * sp - off));
+          for (let r = 0; r < Math.ceil(2.7 / sp) + 1; r++)
+            tl.fromTo(d, { y: -220, x: 0, rotation: 12 }, { y: 2000, x: -120, rotation: 12, duration: sp, ease: "none", immediateRender: false }, Math.max(19.25, 16.81 + r * sp - off));
         }
       })();
 
       /* G1 hook */
       tl.fromTo("#hookA", { scale: 1.6, opacity: 0.0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power4.out" }, 0);
-      tl.fromTo("#planeG", { x: -100, y: 210, rotation: -20 }, { x: 760, y: 120, rotation: 8, duration: 1.1, ease: "power1.inOut" }, 0.1);
-      tl.from("#trail", { attr: { "stroke-dashoffset": 900 }, opacity: 0, duration: 1.1, ease: "power1.inOut" }, 0.1);
-      tl.to("#g1", { scale: 1.3, opacity: 0, duration: 0.14, ease: "power2.in" }, 1.26);
+      tl.fromTo("#planeG", { x: -100, y: 210, rotation: -20 }, { x: 760, y: 120, rotation: 8, duration: 1.1, ease: "power1.inOut" }, 0.10);
+      tl.from("#trail", { attr: { "stroke-dashoffset": 900 }, opacity: 0, duration: 1.1, ease: "power1.inOut" }, 0.10);
+      tl.to("#g1", { scale: 1.3, opacity: 0, duration: 0.14, ease: "power2.in" }, 1.42);
       /* G2 */
-      tl.from("#hookB", { y: -80, scale: 0.6, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 1.42);
-      pop("#portable", 1.62);
-      tl.fromTo("#hookB", { scale: 1 }, { scale: 1.12, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, 2.48);
+      tl.from("#hookB", { y: -80, scale: 0.6, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 1.58);
+      pop("#portable", 1.78);
+      tl.fromTo("#hookB", { scale: 1 }, { scale: 1.12, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, 2.64);
       /* G3 */
-      tl.from("#chipsHead", { y: -50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 3.26);
-      tl.from(".chip", { y: -40, opacity: 0, duration: 0.25, stagger: 0.05, ease: "back.out(2)" }, 3.3);
-      [["#c1", 3.98], ["#c2", 4.72], ["#c3", 5.40]].forEach(([c, t]) => { tl.set(c, { className: "chip on" }, t); tl.fromTo(c, { scale: 1.35 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t); });
+      tl.from("#chipsHead", { y: -50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 3.42);
+      tl.from(".chip", { y: -40, opacity: 0, duration: 0.25, stagger: 0.05, ease: "back.out(2)" }, 3.46);
+      [["#c1", 4.14], ["#c2", 4.88], ["#c3", 5.56]].forEach(([c, t]) => { tl.set(c, { className: "chip on" }, t); tl.fromTo(c, { scale: 1.35 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t); });
       /* G4 hotel */
-      tl.from("#hotelCard", { x: -900, duration: 0.4, ease: "power4.out" }, 6.78);
-      tl.from("#susah .A", { scale: 2.6, opacity: 0, rotation: -12, duration: 0.3, ease: "power4.out" }, 8.21);
-      tl.to("#susah .A", { x: 10, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, 8.5);
+      tl.from("#hotelCard", { x: -900, duration: 0.4, ease: "power4.out" }, 7.31);
+      tl.from("#susah .A", { scale: 2.6, opacity: 0, rotation: -12, duration: 0.3, ease: "power4.out" }, 8.86);
+      tl.to("#susah .A", { x: 10, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, 9.15);
       /* G5 steps */
-      tl.from("#stepsHead", { y: -50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 9.66);
-      tl.from(".step", { x: 500, opacity: 0, duration: 0.3, stagger: 0.08, ease: "power3.out" }, 9.75);
-      [["#st1", 10.93], ["#st2", 11.98], ["#st3", 12.79]].forEach(([c, t]) => { tl.set(c, { className: "step on" }, t); tl.fromTo(c, { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t); });
+      tl.from("#stepsHead", { y: -50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 10.47);
+      tl.from(".step", { x: 500, opacity: 0, duration: 0.3, stagger: 0.08, ease: "power3.out" }, 10.56);
+      [["#st1", 11.99], ["#st2", 13.48], ["#st3", 14.54]].forEach(([c, t]) => { tl.set(c, { className: "step on" }, t); tl.fromTo(c, { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t); });
       /* G6 problems */
-      ["#g6a", "#g6b", "#g6c"].forEach((g, i) => pop(g + " .prob", [13.59, 15.2, 16.83][i], { x: -300, scale: 0.8 }));
-      tl.fromTo("#g6a svg", { y: -6 }, { y: 6, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false }, 13.9);
+      ["#g6a", "#g6b", "#g6c"].forEach((g, i) => pop(g + " .prob", [15.57, 17.41, 19.27][i], { x: -300, scale: 0.8 }));
+      tl.fromTo("#g6a svg", { y: -6 }, { y: 6, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false }, 15.88);
       /* G7 30 minit */
-      pop("#m30", 19.04);
-      pop("#kering", 20.24, { y: 40 });
+      pop("#m30", 21.74);
+      pop("#kering", 22.94, { y: 40 });
       /* G8 dial */
-      tl.from("#dialWrap", { scale: 0.3, rotation: -90, opacity: 0, duration: 0.4, ease: "back.out(1.6)" }, 20.64);
+      tl.from("#dialWrap", { scale: 0.3, rotation: -90, opacity: 0, duration: 0.4, ease: "back.out(1.6)" }, 23.51);
       const dial = { v: 0 };
-      tl.to(dial, { v: 120, duration: 1.1, ease: "power2.out", onUpdate: () => { document.getElementById("dialNum").textContent = Math.round(dial.v); } }, 21.1);
-      tl.to("#dialArc", { attr: { "stroke-dashoffset": 0 }, duration: 1.1, ease: "power2.out" }, 21.1);
-      pop("#maxLbl", 22.2, { y: 40 });
+      tl.to(dial, { v: 120, duration: 1.1, ease: "power2.out", onUpdate: () => { document.getElementById("dialNum").textContent = Math.round(dial.v); } }, 23.97);
+      tl.to("#dialArc", { attr: { "stroke-dashoffset": 0 }, duration: 1.1, ease: "power2.out" }, 23.97);
+      pop("#maxLbl", 25.20, { y: 40 });
       /* G9 temp */
-      tl.from("#tempBadge", { y: -260, opacity: 0, scale: 0.6, duration: 0.4, ease: "back.out(1.7)" }, 22.92);
+      tl.from("#tempBadge", { y: -260, opacity: 0, scale: 0.6, duration: 0.4, ease: "back.out(1.7)" }, 26.07);
       const temp = { v: 0 };
-      tl.to(temp, { v: 48, duration: 1.0, ease: "power2.out", onUpdate: () => { document.getElementById("tempNum").textContent = Math.round(temp.v); } }, 23.8);
-      tl.fromTo("#merc", { attr: { y: 120, height: 10 } }, { attr: { y: 30, height: 100 }, duration: 1.0, ease: "power2.out" }, 23.8);
-      tl.from("#lockRow", { y: 70, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 24.3);
-      tl.fromTo("#shackle", { y: -22 }, { y: 0, duration: 0.16, ease: "power4.in", immediateRender: false }, 24.47);
-      tl.fromTo("#tempBadge", { boxShadow: "0 0 0 rgba(255,106,26,0)" }, { boxShadow: "0 0 70px rgba(255,106,26,0.9)", duration: 0.3, yoyo: true, repeat: 2, immediateRender: false }, 24.8);
+      tl.to(temp, { v: 48, duration: 1.0, ease: "power2.out", onUpdate: () => { document.getElementById("tempNum").textContent = Math.round(temp.v); } }, 26.95);
+      tl.fromTo("#merc", { attr: { y: 120, height: 10 } }, { attr: { y: 30, height: 100 }, duration: 1.0, ease: "power2.out" }, 26.95);
+      tl.from("#lockRow", { y: 70, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 27.45);
+      tl.fromTo("#shackle", { y: -22 }, { y: 0, duration: 0.16, ease: "power4.in", immediateRender: false }, 27.62);
+      tl.fromTo("#tempBadge", { boxShadow: "0 0 0 rgba(255,106,26,0)" }, { boxShadow: "0 0 70px rgba(255,106,26,0.9)", duration: 0.3, yoyo: true, repeat: 2, immediateRender: false }, 27.95);
       /* G10 */
-      pop("#shield", 25.69);
-      tl.to("#shCheck", { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.out" }, 26.0);
-      tl.from("#safeLbl", { y: 50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 26.13);
+      pop("#shield", 28.84);
+      tl.to("#shCheck", { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.out" }, 29.37);
+      tl.from("#safeLbl", { y: 50, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 29.50);
       /* G11 price burst */
       (function () { const pts = []; for (let i = 0; i < 32; i++) { const a = (i / 32) * Math.PI * 2, r = i % 2 ? 210 : 265; pts.push((280 + r * Math.cos(a)).toFixed(1) + "," + (280 + r * Math.sin(a)).toFixed(1)); } document.getElementById("star").setAttribute("points", pts.join(" ")); })();
-      tl.from("#burst", { scale: 0, rotation: -60, duration: 0.45, ease: "back.out(1.8)" }, 27.42);
-      tl.to("#burst svg", { rotation: 30, duration: 2.2, ease: "none" }, 27.42);
-      tl.fromTo("#burstTxt .b", { scale: 1 }, { scale: 1.15, duration: 0.14, yoyo: true, repeat: 1, immediateRender: false }, 28.01);
-      tl.from("#rugi .A", { scale: 3, opacity: 0, duration: 0.25, ease: "power4.out" }, 28.86);
+      tl.from("#burst", { scale: 0, rotation: -60, duration: 0.45, ease: "back.out(1.8)" }, 30.95);
+      tl.to("#burst svg", { rotation: 30, duration: 2.2, ease: "none" }, 30.95);
+      tl.fromTo("#burstTxt .b", { scale: 1 }, { scale: 1.15, duration: 0.14, yoyo: true, repeat: 1, immediateRender: false }, 31.54);
+      tl.from("#rugi .A", { scale: 3, opacity: 0, duration: 0.25, ease: "power4.out" }, 32.39);
       /* G12/13 CTA */
-      tl.from("#naik .box", { scale: 2.6, opacity: 0, rotation: -12, duration: 0.3, ease: "power4.out" }, 29.72);
-      tl.to("#naik .box", { rotation: 2, duration: 0.07, yoyo: true, repeat: 7, ease: "none" }, 30.36);
-      tl.from("#ctaCard", { y: 700, duration: 0.45, ease: "back.out(1.4)" }, 31.02);
-      tl.from("#bag", { scale: 0, rotation: -30, duration: 0.35, ease: "back.out(2.5)" }, 32.0);
-      tl.to("#bag", { y: -24, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 32.35);
-      tl.from("#arrows", { opacity: 0, duration: 0.15 }, 32.06);
-      tl.fromTo("#arrows .ar", { opacity: 0.15 }, { opacity: 1, duration: 0.15, stagger: 0.1, repeat: 3, yoyo: true, ease: "none", immediateRender: false }, 32.06);
+      tl.from("#naik .box", { scale: 2.6, opacity: 0, rotation: -12, duration: 0.3, ease: "power4.out" }, 33.74);
+      tl.to("#naik .box", { rotation: 2, duration: 0.07, yoyo: true, repeat: 7, ease: "none" }, 34.38);
+      tl.from("#ctaCard", { y: 700, duration: 0.45, ease: "back.out(1.4)" }, 35.04);
+      tl.from("#bag", { scale: 0, rotation: -30, duration: 0.35, ease: "back.out(2.5)" }, 36.02);
+      tl.to("#bag", { y: -24, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 36.37);
+      tl.from("#arrows", { opacity: 0, duration: 0.15 }, 36.08);
+      tl.fromTo("#arrows .ar", { opacity: 0.15 }, { opacity: 1, duration: 0.15, stagger: 0.1, repeat: 3, yoyo: true, ease: "none", immediateRender: false }, 36.08);
 
       /* captions */
       /*CAPJS*/
