@@ -41,3 +41,10 @@ Gunakan konsep ini untuk setiap video VO/produk seterusnya, melainkan diminta la
 - Langkah "Cara guna": senarai ringkas 2x2 di atas (aktif = kuning, selesai = hijau) + label besar "LANGKAH N" di tengah.
 - Hanya guna ayat yang pengguna beri — jangan tambah dakwaan baru.
 - Master audio (SFX sahaja) boleh dinormalkan ke -14 LUFS.
+
+## Saiz grafik (diluluskan – Task 3 v3)
+- Semua caption, overlay, kad dan animasi = **70% daripada saiz asal** template ini.
+  - Caption langkah: label "LANGKAH N" 42px, teks utama Anton 67px (stroke 3px + bayang gelap), chip 25px.
+  - Grafik lain dibungkus dalam `.sc { transform: scale(0.7) }` dengan transform-origin di bahagian atas grafik
+    (kedudukan atas kekal, saiz mengecil ke bawah).
+- Rujukan: `video/task3/hyperframes-project/index.html`.
