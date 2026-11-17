@@ -12,7 +12,7 @@ Unboxing/bubble wrap, buka kotak & kabel, tangan masuk-keluar frame, shot statik
 |---|---|---|---|
 | 0.0–2.6 | kasut neon menyala | **HOOK:** "WAJIB BAWAK PERGI TRAVEL!" + kapal terbang | impact, whoosh, pop, riser |
 | 2.6–4.4 | kotak SHOE DRYER | "( PENGERING PORTABLE )" | impact + flash |
-| 4.4–6.8 | tangan masukkan plug di soket hotel | CARA GUNA (senarai 4 langkah) · **LANGKAH 1:** Masukkan plug 3 pin (senarai: PLUG 3 PIN · TEGAKKAN BATANG · MASUKKAN KASUT/KAIN · SET TIMER) | swipe, pop, tick |
+| 4.4–6.8 | tangan masukkan plug di soket hotel | CARA GUNA (senarai 4 langkah) · **LANGKAH 1:** Masukkan plug 3 pin (senarai: PLUG 3 PIN · TEGAKKAN BATANG · MASUKKAN BARANG · SET TIMER) | swipe, pop, tick |
 | 6.8–9.0 | lengan pengering ditegakkan | **LANGKAH 2:** Tegakkan batang pengering | swipe, pop, whoosh |
 | 9.0–13.2 | letak kasut → stokin → baju | **LANGKAH 3:** Masukkan + chip KASUT / STOKIN / BAJU | pop setiap item |
 | 13.2–16.0 | pulas tombol (hotel → close-up) | **LANGKAH 4:** Pulas tombol, set timer | tick ×3, ding |
@@ -23,4 +23,4 @@ Unboxing/bubble wrap, buka kotak & kabel, tangan masuk-keluar frame, shot statik
 
 SFX dijana sendiri; master -14 LUFS (tiada VO dalam video ini).
 
-Kemas kini: saiz caption langkah dikecilkan 30%; item senarai langkah 3 = "MASUKKAN KASUT/KAIN".
+Kemas kini: semua caption, overlay dan animasi dikecilkan 30%; item senarai langkah 3 = "MASUKKAN BARANG".

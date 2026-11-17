@@ -22,6 +22,7 @@
       .pill { display: inline-block; padding: 12px 30px; border-radius: 999px; font-weight: 900; font-size: 42px; }
       .py { background: var(--yellow); color: #111; }
       .pd { background: var(--dark); color: #fff; }
+      .sc { position: absolute; inset: 0; transform: scale(0.7); }
       #vig { background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%); }
       #shade { background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 72%, rgba(0,0,0,0) 100%); }
       #flash { background: #fff; opacity: 0; }
@@ -107,26 +108,32 @@
 
       <!-- HOOK -->
       <div id="g1" class="layer clip" data-start="0" data-duration="2.6">
+        <div class="sc" style="transform-origin:540px 330px">
         <div class="top"><div id="hookA" class="A sh">Wajib bawak<span>pergi travel!</span></div></div>
         <svg id="plane" viewBox="0 0 1080 260">
           <path id="trail" d="M-40 210 Q 380 40 760 120" fill="none" stroke="#ffd60a" stroke-width="8" stroke-dasharray="22 18" stroke-linecap="round" />
           <g id="planeG"><path d="M0 -14 L70 -6 L100 -40 L116 -40 L100 -4 L150 0 L100 4 L116 40 L100 40 L70 6 L0 14 L-10 30 L-24 30 L-14 0 L-24 -30 L-10 -30 Z" fill="#fff" stroke="#111" stroke-width="5" stroke-linejoin="round" /></g>
         </svg>
       </div>
+      </div>
       <div id="g2" class="layer clip" data-start="2.6" data-duration="1.8">
+        <div class="sc" style="transform-origin:540px 1000px">
         <div class="top" style="top:1000px"><div id="portA" class="A sh">( Pengering</div><div id="portB" class="A">Portable )</div></div>
+      </div>
       </div>
 
       <!-- CARA GUNA 4.4–16.0 -->
       <div id="g3" class="layer clip" data-start="4.4" data-duration="11.6">
+        <div class="sc" style="transform-origin:540px 330px">
         <div class="top"><div id="stepsHead" class="A sh">Cara guna</div>
           <div class="steps">
             <div class="step" id="st1"><div class="n">1</div><div class="t">PLUG 3 PIN</div></div>
             <div class="step" id="st2"><div class="n">2</div><div class="t">TEGAKKAN BATANG</div></div>
-            <div class="step" id="st3"><div class="n">3</div><div class="t">MASUKKAN KASUT/KAIN</div></div>
+            <div class="step" id="st3"><div class="n">3</div><div class="t">MASUKKAN BARANG</div></div>
             <div class="step" id="st4"><div class="n">4</div><div class="t">SET TIMER</div></div>
           </div>
         </div>
+      </div>
       </div>
       <div id="L1" class="lbl clip" data-start="4.4" data-duration="2.4"><div class="num">LANGKAH 1</div><div class="A">Masukkan <span>plug 3 pin</span></div></div>
       <div id="L2" class="lbl clip" data-start="6.8" data-duration="2.2"><div class="num">LANGKAH 2</div><div class="A">Tegakkan <span>batang</span> pengering</div></div>
@@ -136,6 +143,7 @@
 
       <!-- USP 1: compact -->
       <div id="g4" class="layer clip" data-start="16.0" data-duration="3.4">
+        <div class="sc" style="transform-origin:540px 330px">
         <div class="top">
           <div id="compactCard"><svg viewBox="0 0 120 120" width="110" height="110"><rect x="34" y="34" width="52" height="52" rx="10" fill="#ffd60a"/><g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30 V8 H30"/><path d="M8 8 L30 30"/><path d="M112 90 V112 H90"/><path d="M112 112 L90 90"/></g></svg><div class="A">Saiz kompak</div></div>
           <div id="bagWrap">
@@ -149,24 +157,31 @@
           <div id="begPill"><span class="pill py">SENANG MASUK DALAM BEG</span></div>
         </div>
       </div>
+      </div>
 
       <!-- USP 2: 48C -->
       <div id="g5" class="layer clip" data-start="19.4" data-duration="3.0">
+        <div class="sc" style="transform-origin:540px 330px">
         <div class="top">
           <div id="tempBadge"><svg width="64" height="160" viewBox="0 0 70 170"><rect x="22" y="6" width="26" height="120" rx="13" fill="none" stroke="#fff" stroke-width="6"/><rect id="merc" x="29" y="40" width="12" height="90" rx="6" fill="#ff6a1a"/><circle cx="35" cy="140" r="26" fill="#ff6a1a" stroke="#fff" stroke-width="6"/></svg><div id="tempNum">0</div><div id="tempU">&deg;C</div></div>
           <div id="lockRow"><svg width="84" height="100" viewBox="0 0 92 110"><path id="shackle" d="M22 52 V32 a24 24 0 0 1 48 0 V52" fill="none" stroke="#ffd60a" stroke-width="12" stroke-linecap="round"/><rect x="8" y="50" width="76" height="58" rx="12" fill="#ffd60a"/><circle cx="46" cy="75" r="8" fill="#111"/><rect x="42" y="78" width="8" height="16" rx="3" fill="#111"/></svg><div class="A sh">Suhu dah <span>lock</span></div></div>
         </div>
       </div>
+      </div>
 
       <!-- CTA -->
       <div id="g6" class="layer clip" data-start="22.4" data-duration="2.0">
+        <div class="sc" style="transform-origin:540px 330px">
         <div class="top"><div id="burst"><svg viewBox="0 0 600 600"><polygon id="star" fill="#ffd60a" stroke="#111" stroke-width="8" points=""/></svg>
           <div id="burstTxt"><div class="a">Harga tengah</div><div class="b">Murah!</div></div></div></div>
       </div>
+      </div>
       <div id="g7" class="layer clip" data-start="24.4" data-duration="4.2">
+        <div class="sc" style="transform-origin:540px 520px">
         <div id="murah2"><div class="box"><div class="A">Harga tengah murah!</div></div></div>
         <div id="grab"><div class="card"><div class="A">Grab cepat!</div></div></div>
         <svg id="arrows" viewBox="0 0 120 200"><path class="ar" d="M15 20 L60 60 L105 20" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 80 L60 120 L105 80" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 140 L60 180 L105 140" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
       </div>
 
       <div id="flash" class="layer clip" data-start="0" data-duration="28.6"></div>
