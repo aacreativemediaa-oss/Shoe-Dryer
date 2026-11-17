@@ -35,3 +35,9 @@ Gunakan konsep ini untuk setiap video VO/produk seterusnya, melainkan diminta la
 - Set keterlihatan klip secara eksplisit dalam timeline GSAP (render-path independent).
 - Semak dengan `npx hyperframes check` + snapshot sebelum render; render `-f 60 -q delivery`.
 - Rujukan projek: `video/task1/hyperframes-project/` (build.py + template.tpl).
+
+## Varian tanpa VO (Task 3)
+- Bila tiada fail VO: footage + teks skrin ikut skrip pengguna (hook / langkah / USP / CTA) + SFX.
+- Langkah "Cara guna": senarai ringkas 2x2 di atas (aktif = kuning, selesai = hijau) + label besar "LANGKAH N" di tengah.
+- Hanya guna ayat yang pengguna beri — jangan tambah dakwaan baru.
+- Master audio (SFX sahaja) boleh dinormalkan ke -14 LUFS.
