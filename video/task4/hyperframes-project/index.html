@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop800.woff2") format("woff2"); font-weight: 800; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop900.woff2") format("woff2"); font-weight: 900; }
+      :root {
+        --yellow: #ffd60a; --orange: #ff6a1a; --red: #ff2d3d; --green: #2bd96b; --blue: #3aa0ff; --dark: rgba(8,10,20,0.86);
+        /* approved type scale */
+        --t-head: 100px; --t-sub: 47px; --t-cap: 40px; --t-num: 64px; --t-chip: 19px;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05070d; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Poppins", sans-serif; color: #fff; }
+      .clip { position: absolute; inset: 0; }
+      video.clip { width: 1080px; height: 1920px; object-fit: cover; }
+      .layer { position: absolute; inset: 0; pointer-events: none; }
+      .top { position: absolute; left: 70px; right: 150px; top: 330px; text-align: center; }
+      .head { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: 0.98; font-size: var(--t-head); text-shadow: 0 5px 0 rgba(0,0,0,0.35), 0 10px 32px rgba(0,0,0,0.6); }
+      .head .y { color: var(--yellow); }
+      .sub { display: inline-block; font-family: "Anton", sans-serif; text-transform: uppercase; font-size: var(--t-sub); line-height: 1.05; padding: 6px 22px 10px; border-radius: 14px; }
+      .s-y { background: var(--yellow); color: #111; }
+      .s-r { background: var(--red); color: #fff; }
+      .s-d { background: var(--dark); color: #fff; }
+      .s-g { background: var(--green); color: #111; }
+      .tilt { transform: rotate(-3deg); }
+      .num { font-family: "Anton", sans-serif; font-size: var(--t-num); line-height: 1; }
+      .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: var(--dark); border: 3px solid rgba(255,255,255,0.3); font-weight: 900; font-size: var(--t-chip); color: rgba(255,255,255,0.75); white-space: nowrap; }
+      .chip .n { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+      .chip.on { background: var(--yellow); border-color: var(--yellow); color: #111; }
+      .chip.on .n { background: #111; color: var(--yellow); }
+      .chip.done { border-color: var(--green); color: #fff; }
+      .chip.done .n { background: var(--green); color: #111; }
+      .mt { margin-top: 18px; }
+      #vig { background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%); }
+      #shade { background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0) 100%); }
+      #flash { background: #fff; opacity: 0; }
+      #rainTint { background: linear-gradient(180deg, rgba(10,25,60,0.72), rgba(10,25,60,0.4) 50%, rgba(5,10,30,0.78)); }
+      .drop { position: absolute; top: 0; width: 3px; border-radius: 3px; background: linear-gradient(180deg, rgba(200,225,255,0), rgba(200,225,255,0.75)); }
+
+      /* captions (40px) */
+      .cap { top: 1110px; bottom: auto; left: 110px; right: 190px; height: auto; text-align: center; font-weight: 900; font-size: var(--t-cap); line-height: 1.2; text-transform: uppercase; }
+      .cw { display: inline-block; margin: 0 0.08em; color: #fff; -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 6px 14px rgba(0,0,0,0.6); }
+      .cw.emph.on { color: var(--yellow); }
+
+      /* icons */
+      .ico { display: block; margin: 0 auto 14px; }
+      #steps { display: grid; grid-template-columns: auto auto; justify-content: center; gap: 8px; margin-top: 16px; }
+      .stepLbl { position: absolute; left: 70px; right: 150px; top: 960px; text-align: center; }
+      #tempBadge { display: inline-flex; align-items: center; gap: 12px; padding: 12px 26px 12px 18px; border-radius: 22px; background: var(--dark); border: 4px solid var(--orange); }
+      #tempU { color: var(--orange); }
+      #costCard { display: inline-flex; align-items: center; gap: 14px; padding: 12px 26px; border-radius: 22px; background: var(--dark); border: 4px solid var(--yellow); }
+      #costCard .num span { color: var(--yellow); }
+      #ctaCard { display: inline-block; background: var(--yellow); color: #111; border-radius: 24px; padding: 16px 30px 22px; box-shadow: 0 18px 50px rgba(0,0,0,0.5); }
+      #ctaCard .head { text-shadow: none; }
+      #bag { position: absolute; left: 415px; top: 1250px; width: 100px; }
+      #arrows { position: absolute; left: 425px; top: 1370px; width: 80px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="32.4" data-width="1080" data-height="1920" data-fps="60">
+      <video id="v0" class="clip" src="assets/video/hook45.mp4" data-start="0.00" data-duration="4.52" data-media-start="0.0" muted playsinline></video>
+      <video id="v1" class="clip" src="assets/video/lv0.mp4" data-start="4.52" data-duration="2.40" data-media-start="0.0" muted playsinline></video>
+      <video id="v2" class="clip" src="assets/video/IMG_2344.mp4" data-start="6.92" data-duration="1.38" data-media-start="8.0" muted playsinline></video>
+      <video id="v3" class="clip" src="assets/video/IMG_2344.mp4" data-start="8.30" data-duration="2.08" data-media-start="12.0" muted playsinline></video>
+      <video id="v4" class="clip" src="assets/video/copy0B.mp4" data-start="10.38" data-duration="1.86" data-media-start="0.3" muted playsinline></video>
+      <video id="v5" class="clip" src="assets/video/IMG_2344.mp4" data-start="12.24" data-duration="1.80" data-media-start="31.0" muted playsinline></video>
+      <video id="v6" class="clip" src="assets/video/IMG_2345.mp4" data-start="14.04" data-duration="1.18" data-media-start="4.6" muted playsinline></video>
+      <video id="v7" class="clip" src="assets/video/lv0.mp4" data-start="15.22" data-duration="3.40" data-media-start="31.2" muted playsinline></video>
+      <video id="v8" class="clip" src="assets/video/IMG_2493.mp4" data-start="18.62" data-duration="2.34" data-media-start="97.0" muted playsinline></video>
+      <video id="v9" class="clip" src="assets/video/IMG_2344.mp4" data-start="20.96" data-duration="1.94" data-media-start="4.4" muted playsinline></video>
+      <video id="v10" class="clip" src="assets/video/IMG_2345.mp4" data-start="22.90" data-duration="2.64" data-media-start="7.8" muted playsinline></video>
+      <video id="v11" class="clip" src="assets/video/IMG_2493.mp4" data-start="25.54" data-duration="1.44" data-media-start="68.0" muted playsinline></video>
+      <video id="v12" class="clip" src="assets/video/IMG_2344.mp4" data-start="26.98" data-duration="1.34" data-media-start="0.5" muted playsinline></video>
+      <video id="v13" class="clip" src="assets/video/lv0.mp4" data-start="28.32" data-duration="1.52" data-media-start="57.4" muted playsinline></video>
+      <video id="v14" class="clip" src="assets/video/IMG_2345.mp4" data-start="29.84" data-duration="2.56" data-media-start="19.6" muted playsinline></video>
+
+      <div id="vig" class="layer clip" data-start="0" data-duration="32.4"></div>
+      <div id="shade" class="layer clip" data-start="0" data-duration="32.4"></div>
+      <div id="rainTint" class="layer clip" data-start="0" data-duration="4.52"></div>
+      <div id="rain" data-layout-allow-overflow class="layer clip" data-start="0" data-duration="4.52"></div>
+
+      <!-- HOOK 0–4.52 -->
+      <div id="g1" class="layer clip" data-start="0" data-duration="4.52">
+        <div class="top">
+          <svg class="ico" id="cloud" width="130" height="104" viewBox="0 0 300 240"><path d="M80 140 a55 55 0 0 1 8-108 a72 72 0 0 1 132 22 a48 48 0 0 1 4 96 z" fill="#dfe8f7"/><g fill="#7fb4ff"><path class="cd" d="M95 165 q10 22 0 36 q-10-14 0-36z"/><path class="cd" d="M150 170 q10 22 0 36 q-10-14 0-36z"/><path class="cd" d="M205 165 q10 22 0 36 q-10-14 0-36z"/></g></svg>
+          <div id="hookH" class="head"><span class="w">Musim</span> <span class="w y">hujan</span><br /><span class="w y">lebat</span> <span class="w">ni!</span></div>
+          <div id="hookS" class="mt"><span class="sub s-r tilt">Kasut &amp; baju lambat kering?</span></div>
+        </div>
+      </div>
+      <!-- PRODUCT 4.52–6.92 -->
+      <div id="g2" class="layer clip" data-start="4.52" data-duration="2.4">
+        <div class="top"><div id="prodH" class="head">Pengering<br /><span class="y">portable</span></div><div id="prodS" class="mt"><span class="sub s-y">Sesuai sangat!</span></div></div>
+      </div>
+      <!-- CARA GUNA 6.92–15.22 -->
+      <div id="g3" class="layer clip" data-start="6.92" data-duration="8.3">
+        <div class="top"><div id="stepsH" class="head">Cara guna</div>
+          <div id="steps">
+            <div class="chip" id="st1"><span class="n">1</span>MASUKKAN KASUT</div>
+            <div class="chip" id="st2"><span class="n">2</span>ATAU CELAH BAJU</div>
+            <div class="chip" id="st3"><span class="n">3</span>ON TIMER</div>
+            <div class="chip" id="st4"><span class="n">4</span>TUNGGU KERING</div>
+          </div>
+        </div>
+      </div>
+      <div id="L1" class="stepLbl clip" data-start="8.3" data-duration="2.08"><span class="sub s-y">1 · Masukkan kasut</span></div>
+      <div id="L2" class="stepLbl clip" data-start="10.38" data-duration="1.86"><span class="sub s-y">2 · Atau celah baju</span></div>
+      <div id="L3" class="stepLbl clip" data-start="12.24" data-duration="1.8"><span class="sub s-y">3 · On timer</span></div>
+      <div id="L4" class="stepLbl clip" data-start="14.04" data-duration="1.18"><span class="sub s-g">4 · Tunggu kering &#10003;</span></div>
+      <!-- 48C 15.22–18.62 -->
+      <div id="g4" class="layer clip" data-start="15.22" data-duration="3.4">
+        <div class="top"><div id="goodH" class="head">Yang <span class="y">bagusnya</span></div>
+          <div class="mt"><div id="tempBadge"><svg width="34" height="84" viewBox="0 0 70 170"><rect x="22" y="6" width="26" height="120" rx="13" fill="none" stroke="#fff" stroke-width="7"/><rect id="merc" x="29" y="40" width="12" height="90" rx="6" fill="#ff6a1a"/><circle cx="35" cy="140" r="26" fill="#ff6a1a" stroke="#fff" stroke-width="7"/></svg><div class="num" id="tempNum">0</div><div class="num" id="tempU">&deg;C</div></div></div>
+          <div id="lockS" class="mt"><span class="sub s-y"><svg width="30" height="36" viewBox="0 0 92 110" style="vertical-align:-4px;margin-right:8px"><path id="shackle" d="M22 52 V32 a24 24 0 0 1 48 0 V52" fill="none" stroke="#111" stroke-width="12" stroke-linecap="round"/><rect x="8" y="50" width="76" height="58" rx="12" fill="#111"/></svg>Suhu dah lock</span></div>
+        </div>
+      </div>
+      <!-- SAFE 18.62–20.96 -->
+      <div id="g5" class="layer clip" data-start="18.62" data-duration="2.34">
+        <div class="top">
+          <svg class="ico" id="shield" width="110" height="126" viewBox="0 0 210 240"><path d="M105 10 L190 42 V112 C190 170 152 210 105 230 C58 210 20 170 20 112 V42 Z" fill="#2bd96b" stroke="#fff" stroke-width="10" stroke-linejoin="round"/><path id="shCheck" d="M62 120 l30 30 l58-62" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="160" stroke-dashoffset="160"/></svg>
+          <div id="safeH" class="head">Tak perlu <span class="y">risau</span></div>
+          <div id="safeS" class="mt"><span class="sub s-g">Kain tak rosak</span></div>
+        </div>
+      </div>
+      <!-- COST 20.96–25.54 -->
+      <div id="g6" class="layer clip" data-start="20.96" data-duration="4.58">
+        <div class="top">
+          <svg class="ico" id="bolt" width="80" height="110" viewBox="0 0 80 110"><path d="M48 4 L10 62 H36 L28 106 L70 40 H44 Z" fill="#ffd60a" stroke="#111" stroke-width="5" stroke-linejoin="round"/></svg>
+          <div id="costH" class="head">Kos elektrik<br /><span class="y">murah</span></div>
+          <div id="costS" class="mt"><div id="costCard"><span class="chip on">1 JAM</span><div class="num">&asymp; <span id="senNum">0</span> <span>SEN</span></div></div></div>
+        </div>
+      </div>
+      <!-- WHERE 25.54–28.32 -->
+      <div id="g7" class="layer clip" data-start="25.54" data-duration="2.78">
+        <div class="top"><div id="whereH" class="head">Guna mana-mana</div>
+          <div id="homeS" class="mt"><span class="sub s-d">Dalam rumah &#10003;</span></div>
+          <div id="travS" class="mt"><span class="sub s-y">Bawa travel &#10003;</span></div>
+        </div>
+      </div>
+      <!-- STOCK 28.32–29.84 -->
+      <div id="g8" class="layer clip" data-start="28.32" data-duration="1.52">
+        <div class="top"><div id="stockH" class="head"><span class="sub s-r tilt" style="font-size:var(--t-head);padding:10px 30px 16px">Stok dah<br />tak banyak!</span></div></div>
+      </div>
+      <!-- CTA 29.84–32.4 -->
+      <div id="g9" class="layer clip" data-start="29.84" data-duration="2.56">
+        <div class="top"><div id="soldS"><span class="sub s-r tilt">Sebelum sold out!</span></div>
+          <div id="ctaWrap" class="mt"><div id="ctaCard"><div class="head">Check out<br />sekarang</div></div></div>
+          <div id="begS" class="mt"><span class="sub s-d">Dengan <span style="color:var(--yellow)">beg kuning</span></span></div>
+        </div>
+        <svg id="bag" viewBox="0 0 170 170"><path d="M52 62 V48 a33 33 0 0 1 66 0 V62" fill="none" stroke="#111" stroke-width="11" stroke-linecap="round"/><path d="M22 58 H148 L138 158 H32 Z" fill="#ffd60a" stroke="#111" stroke-width="9" stroke-linejoin="round"/><path d="M60 98 a25 25 0 0 0 50 0" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/></svg>
+        <svg id="arrows" viewBox="0 0 120 200"><path class="ar" d="M15 20 L60 60 L105 20" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 80 L60 120 L105 80" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 140 L60 180 L105 140" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="cap clip" id="cap0" data-start="0.000" data-duration="1.400"><span class="cw" id="w0_0">Musim</span> <span class="cw emph" id="w0_1">hujan</span> <span class="cw emph" id="w0_2">lebat</span> <span class="cw" id="w0_3">ni</span></div>
+      <div class="cap clip" id="cap1" data-start="1.400" data-duration="1.000"><span class="cw" id="w1_0">kalau</span> <span class="cw emph" id="w1_1">kasut</span> <span class="cw" id="w1_2">ataupun</span> <span class="cw emph" id="w1_3">pakaian</span></div>
+      <div class="cap clip" id="cap2" data-start="2.400" data-duration="0.980"><span class="cw" id="w2_0">korang</span> <span class="cw emph" id="w2_1">lambat</span> <span class="cw emph" id="w2_2">kering</span></div>
+      <div class="cap clip" id="cap3" data-start="3.380" data-duration="1.140"><span class="cw" id="w3_0">bila</span> <span class="cw" id="w3_1">jemur</span> <span class="cw" id="w3_2">kat</span> <span class="cw" id="w3_3">luar</span></div>
+      <div class="cap clip" id="cap4" data-start="4.520" data-duration="0.860"><span class="cw" id="w4_0">pengering</span> <span class="cw emph" id="w4_1">portable</span> <span class="cw" id="w4_2">ni</span></div>
+      <div class="cap clip" id="cap5" data-start="5.380" data-duration="0.580"><span class="cw" id="w5_0">memang</span> <span class="cw emph" id="w5_1">sesuai</span> <span class="cw" id="w5_2">sangat</span></div>
+      <div class="cap clip" id="cap6" data-start="5.960" data-duration="0.960"><span class="cw" id="w6_0">untuk</span> <span class="cw" id="w6_1">korang</span> <span class="cw" id="w6_2">tau</span></div>
+      <div class="cap clip" id="cap7" data-start="6.920" data-duration="0.480"><span class="cw" id="w7_0">Nak</span> <span class="cw" id="w7_1">pakai</span> <span class="cw" id="w7_2">pun</span></div>
+      <div class="cap clip" id="cap8" data-start="7.400" data-duration="0.740"><span class="cw emph" id="w8_0">senang</span> <span class="cw" id="w8_1">je</span></div>
+      <div class="cap clip" id="cap9" data-start="8.140" data-duration="0.760"><span class="cw" id="w9_0">korang</span> <span class="cw emph" id="w9_1">masukkan</span> <span class="cw emph" id="w9_2">kasut</span></div>
+      <div class="cap clip" id="cap10" data-start="8.900" data-duration="1.480"><span class="cw" id="w10_0">dekat</span> <span class="cw" id="w10_1">batang</span> <span class="cw" id="w10_2">ni</span></div>
+      <div class="cap clip" id="cap11" data-start="10.380" data-duration="0.680"><span class="cw" id="w11_0">atau</span> <span class="cw emph" id="w11_1">masukkan</span> <span class="cw" id="w11_2">celah</span></div>
+      <div class="cap clip" id="cap12" data-start="11.060" data-duration="1.180"><span class="cw emph" id="w12_0">baju</span> <span class="cw" id="w12_1">macam</span> <span class="cw" id="w12_2">ni</span></div>
+      <div class="cap clip" id="cap13" data-start="12.240" data-duration="0.600"><span class="cw" id="w13_0">lepas</span> <span class="cw" id="w13_1">tu</span> <span class="cw" id="w13_2">korang</span> <span class="cw" id="w13_3">on</span></div>
+      <div class="cap clip" id="cap14" data-start="12.840" data-duration="1.200"><span class="cw" id="w14_0">je</span> <span class="cw emph" id="w14_1">timer</span> <span class="cw" id="w14_2">ni</span></div>
+      <div class="cap clip" id="cap15" data-start="14.040" data-duration="1.180"><span class="cw" id="w15_0">dan</span> <span class="cw" id="w15_1">tunggu</span> <span class="cw" id="w15_2">sampai</span> <span class="cw emph" id="w15_3">kering</span></div>
+      <div class="cap clip" id="cap16" data-start="15.220" data-duration="0.860"><span class="cw" id="w16_0">Yang</span> <span class="cw" id="w16_1">bagusnya</span></div>
+      <div class="cap clip" id="cap17" data-start="16.080" data-duration="0.780"><span class="cw" id="w17_0">suhu</span> <span class="cw" id="w17_1">dia</span> <span class="cw" id="w17_2">dah</span> <span class="cw emph" id="w17_3">lock</span></div>
+      <div class="cap clip" id="cap18" data-start="16.860" data-duration="1.760"><span class="cw" id="w18_0">pada</span> <span class="cw" id="w18_1">48°C</span> <span class="cw" id="w18_2">tau</span></div>
+      <div class="cap clip" id="cap19" data-start="18.620" data-duration="0.420"><span class="cw" id="w19_0">So</span> <span class="cw" id="w19_1">korang</span> <span class="cw" id="w19_2">tak</span></div>
+      <div class="cap clip" id="cap20" data-start="19.040" data-duration="0.860"><span class="cw" id="w20_0">perlu</span> <span class="cw emph" id="w20_1">risau</span></div>
+      <div class="cap clip" id="cap21" data-start="19.900" data-duration="1.060"><span class="cw" id="w21_0">material</span> <span class="cw" id="w21_1">kain</span> <span class="cw emph" id="w21_2">rosak</span></div>
+      <div class="cap clip" id="cap22" data-start="20.960" data-duration="0.760"><span class="cw" id="w22_0">Dan</span> <span class="cw" id="w22_1">kos</span> <span class="cw" id="w22_2">elektrik</span></div>
+      <div class="cap clip" id="cap23" data-start="21.720" data-duration="1.180"><span class="cw" id="w23_0">pun</span> <span class="cw emph" id="w23_1">murah</span> <span class="cw" id="w23_2">sangat</span></div>
+      <div class="cap clip" id="cap24" data-start="22.900" data-duration="0.520"><span class="cw" id="w24_0">Satu</span> <span class="cw" id="w24_1">jam</span> <span class="cw" id="w24_2">korang</span></div>
+      <div class="cap clip" id="cap25" data-start="23.420" data-duration="0.760"><span class="cw" id="w25_0">pakai</span> <span class="cw" id="w25_1">ni</span></div>
+      <div class="cap clip" id="cap26" data-start="24.180" data-duration="0.480"><span class="cw" id="w26_0">lebih</span> <span class="cw" id="w26_1">kurang</span> <span class="cw emph" id="w26_2">10</span></div>
+      <div class="cap clip" id="cap27" data-start="24.660" data-duration="0.880"><span class="cw emph" id="w27_0">sen</span> <span class="cw" id="w27_1">je</span> <span class="cw" id="w27_2">tau</span></div>
+      <div class="cap clip" id="cap28" data-start="25.540" data-duration="0.400"><span class="cw" id="w28_0">Nak</span> <span class="cw" id="w28_1">pakai</span> <span class="cw" id="w28_2">dalam</span></div>
+      <div class="cap clip" id="cap29" data-start="25.940" data-duration="1.040"><span class="cw emph" id="w29_0">rumah</span> <span class="cw" id="w29_1">boleh</span></div>
+      <div class="cap clip" id="cap30" data-start="26.980" data-duration="0.680"><span class="cw" id="w30_0">nak</span> <span class="cw" id="w30_1">bawa</span> <span class="cw" id="w30_2">pergi</span> <span class="cw emph" id="w30_3">travel</span></div>
+      <div class="cap clip" id="cap31" data-start="27.660" data-duration="0.660"><span class="cw" id="w31_0">pun</span> <span class="cw emph" id="w31_1">senang</span> <span class="cw" id="w31_2">sangat</span></div>
+      <div class="cap clip" id="cap32" data-start="28.320" data-duration="0.740"><span class="cw emph" id="w32_0">Stok</span> <span class="cw" id="w32_1">dah</span> <span class="cw" id="w32_2">tak</span></div>
+      <div class="cap clip" id="cap33" data-start="29.060" data-duration="0.780"><span class="cw emph" id="w33_0">banyak</span> <span class="cw" id="w33_1">tau</span></div>
+      <div class="cap clip" id="cap34" data-start="29.840" data-duration="0.940"><span class="cw" id="w34_0">Sebelum</span> <span class="cw emph" id="w34_1">sold</span> <span class="cw emph" id="w34_2">out</span></div>
+      <div class="cap clip" id="cap35" data-start="30.780" data-duration="0.320"><span class="cw" id="w35_0">better</span> <span class="cw" id="w35_1">korang</span> <span class="cw" id="w35_2">check</span> <span class="cw" id="w35_3">out</span></div>
+
+      <div id="flash" class="layer clip" data-start="0" data-duration="32.4"></div>
+
+      <audio id="vo" src="assets/audio/vo_original.m4a" data-start="0" data-duration="32.19" data-volume="1"></audio>
+      <audio id="s0" src="assets/sfx/rain.wav" data-start="0.0" data-duration="4.0" data-volume="0.12"></audio>
+      <audio id="s1" src="assets/sfx/impact.wav" data-start="0.0" data-duration="1.2" data-volume="0.14"></audio>
+      <audio id="s2" src="assets/sfx/whoosh.wav" data-start="0.05" data-duration="0.55" data-volume="0.14"></audio>
+      <audio id="s3" src="assets/sfx/pop.wav" data-start="2.64" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s4" src="assets/sfx/riser.wav" data-start="3.2" data-duration="1.3" data-volume="0.1"></audio>
+      <audio id="s5" src="assets/sfx/impact.wav" data-start="4.52" data-duration="1.2" data-volume="0.16"></audio>
+      <audio id="s6" src="assets/sfx/pop.wav" data-start="5.56" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s7" src="assets/sfx/swipe.wav" data-start="6.88" data-duration="0.3" data-volume="0.12"></audio>
+      <audio id="s8" src="assets/sfx/pop.wav" data-start="8.64" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s9" src="assets/sfx/swipe.wav" data-start="10.34" data-duration="0.3" data-volume="0.12"></audio>
+      <audio id="s10" src="assets/sfx/pop.wav" data-start="10.86" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s11" src="assets/sfx/swipe.wav" data-start="12.2" data-duration="0.3" data-volume="0.12"></audio>
+      <audio id="s12" src="assets/sfx/tick.wav" data-start="12.7" data-duration="0.05" data-volume="0.15"></audio>
+      <audio id="s13" src="assets/sfx/tick.wav" data-start="12.9" data-duration="0.05" data-volume="0.15"></audio>
+      <audio id="s14" src="assets/sfx/tick.wav" data-start="13.1" data-duration="0.05" data-volume="0.15"></audio>
+      <audio id="s15" src="assets/sfx/pop.wav" data-start="14.12" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s16" src="assets/sfx/ding.wav" data-start="14.56" data-duration="1.3" data-volume="0.12"></audio>
+      <audio id="s17" src="assets/sfx/whoosh.wav" data-start="15.18" data-duration="0.55" data-volume="0.12"></audio>
+      <audio id="s18" src="assets/sfx/tick.wav" data-start="16.2" data-duration="0.05" data-volume="0.14"></audio>
+      <audio id="s19" src="assets/sfx/tick.wav" data-start="16.4" data-duration="0.05" data-volume="0.14"></audio>
+      <audio id="s20" src="assets/sfx/impact.wav" data-start="16.56" data-duration="0.6" data-volume="0.1"></audio>
+      <audio id="s21" src="assets/sfx/ding.wav" data-start="17.14" data-duration="1.3" data-volume="0.13"></audio>
+      <audio id="s22" src="assets/sfx/swipe.wav" data-start="18.58" data-duration="0.3" data-volume="0.12"></audio>
+      <audio id="s23" src="assets/sfx/pop.wav" data-start="19.9" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s24" src="assets/sfx/whoosh.wav" data-start="20.92" data-duration="0.55" data-volume="0.12"></audio>
+      <audio id="s25" src="assets/sfx/pop.wav" data-start="22.04" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s26" src="assets/sfx/swipe.wav" data-start="22.86" data-duration="0.3" data-volume="0.12"></audio>
+      <audio id="s27" src="assets/sfx/kaching.wav" data-start="24.44" data-duration="1.3" data-volume="0.16"></audio>
+      <audio id="s28" src="assets/sfx/swipe.wav" data-start="25.5" data-duration="0.3" data-volume="0.12"></audio>
+      <audio id="s29" src="assets/sfx/pop.wav" data-start="26.0" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s30" src="assets/sfx/whoosh.wav" data-start="27.0" data-duration="0.55" data-volume="0.13"></audio>
+      <audio id="s31" src="assets/sfx/pop.wav" data-start="27.44" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s32" src="assets/sfx/impact.wav" data-start="28.32" data-duration="1.0" data-volume="0.15"></audio>
+      <audio id="s33" src="assets/sfx/whoosh.wav" data-start="29.8" data-duration="0.55" data-volume="0.13"></audio>
+      <audio id="s34" src="assets/sfx/pop.wav" data-start="30.1" data-duration="0.12" data-volume="0.15"></audio>
+      <audio id="s35" src="assets/sfx/riser.wav" data-start="30.0" data-duration="1.1" data-volume="0.08"></audio>
+      <audio id="s36" src="assets/sfx/impact.wav" data-start="31.1" data-duration="0.8" data-volume="0.12"></audio>
+      <audio id="s37" src="assets/sfx/pop.wav" data-start="31.8" data-duration="0.12" data-volume="0.16"></audio>
+      <audio id="s38" src="assets/sfx/ding.wav" data-start="31.9" data-duration="0.5" data-volume="0.1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const punch = (s, t, f = 1.12, d = 0.3) => tl.fromTo(s, { scale: f }, { scale: 1, duration: d, ease: "power3.out" }, t);
+      const drift = (s, t, d) => tl.fromTo(s, { scale: 1 }, { scale: 1.07, duration: d, ease: "none", immediateRender: false }, t);
+      const flash = (t, a) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: 0.18, ease: "power2.out", immediateRender: false }, t);
+      const pop = (s, t, extra = {}) => tl.from(s, Object.assign({ scale: 0.3, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, extra), t);
+      const slam = (s, t) => tl.from(s, { scale: 2.2, opacity: 0, duration: 0.3, ease: "power4.out" }, t);
+      const hl = (s, t, c) => { tl.set(s, { className: c + " on" }, t); tl.fromTo(s, { scale: 1.15 }, { scale: 1, duration: 0.18, ease: "back.out(3)", immediateRender: false }, t); };
+      const count = (id, to, t, d) => { const o = { v: 0 }; tl.to(o, { v: to, duration: d, ease: "power2.out", onUpdate: () => { document.getElementById(id).textContent = Math.round(o.v); } }, t); };
+
+      punch("#v0", 0.00); drift("#v0", 0.30, 4.22);
+      punch("#v1", 4.52); drift("#v1", 4.82, 2.10); flash(4.52, 0.35);
+      punch("#v2", 6.92); drift("#v2", 7.22, 1.08); flash(6.92, 0.35);
+      punch("#v3", 8.30); drift("#v3", 8.60, 1.78); flash(8.30, 0.35);
+      punch("#v4", 10.38); drift("#v4", 10.68, 1.56); flash(10.38, 0.35);
+      punch("#v5", 12.24); drift("#v5", 12.54, 1.50); flash(12.24, 0.35);
+      punch("#v6", 14.04); drift("#v6", 14.34, 0.88); flash(14.04, 0.35);
+      punch("#v7", 15.22); drift("#v7", 15.52, 3.10); flash(15.22, 0.35);
+      punch("#v8", 18.62); drift("#v8", 18.92, 2.04); flash(18.62, 0.35);
+      punch("#v9", 20.96); drift("#v9", 21.26, 1.64); flash(20.96, 0.35);
+      punch("#v10", 22.90); drift("#v10", 23.20, 2.34); flash(22.90, 0.35);
+      punch("#v11", 25.54); drift("#v11", 25.84, 1.14); flash(25.54, 0.35);
+      punch("#v12", 26.98); drift("#v12", 27.28, 1.04); flash(26.98, 0.35);
+      punch("#v13", 28.32); drift("#v13", 28.62, 1.22); flash(28.32, 0.35);
+      punch("#v14", 29.84); drift("#v14", 30.14, 2.26); flash(29.84, 0.35);
+      flash(4.52, 0.8); flash(28.32, 0.8);
+
+      /* rain */
+      (function () {
+        const rain = document.getElementById("rain"); let seed = 11;
+        const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
+        for (let i = 0; i < 60; i++) {
+          const d = document.createElement("div"); d.className = "drop";
+          d.style.left = Math.round(rnd() * 1120 - 20) + "px"; d.style.height = Math.round(60 + rnd() * 110) + "px"; d.style.opacity = (0.35 + rnd() * 0.6).toFixed(2);
+          rain.appendChild(d);
+          const sp = 0.35 + rnd() * 0.3, off = rnd() * sp;
+          for (let r = 0; r < Math.ceil(4.7 / sp) + 1; r++)
+            tl.fromTo(d, { y: -220, x: 0, rotation: 12 }, { y: 2000, x: -120, rotation: 12, duration: sp, ease: "none", immediateRender: false }, Math.max(0, r * sp - off));
+        }
+      })();
+
+      /* hook */
+      gsap.utils.toArray("#hookH .w").forEach((w, i) => i < 2
+        ? tl.fromTo(w, { y: -24 }, { y: 0, duration: 0.3, ease: "back.out(2)" }, 0)
+        : tl.from(w, { y: 70, scale: 0.4, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, 0.68 + (i - 2) * 0.28));
+      tl.from("#cloud", { y: -50, opacity: 0, duration: 0.4, ease: "back.out(1.8)" }, 0.1);
+      tl.fromTo("#cloud .cd", { y: -8, opacity: 0 }, { y: 24, opacity: 1, duration: 0.45, stagger: 0.15, repeat: 6, ease: "power1.in" }, 0.4);
+      slam("#hookS", 2.64);
+      tl.to("#hookS .sub", { x: 8, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, 2.9);
+      tl.to("#g1", { scale: 1.25, opacity: 0, duration: 0.14, ease: "power2.in" }, 4.38);
+      /* product */
+      slam("#prodH", 4.54); pop("#prodS", 5.56, { y: 30 });
+      /* steps */
+      tl.from("#stepsH", { y: -40, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 6.94);
+      tl.from("#steps .chip", { y: -30, opacity: 0, duration: 0.25, stagger: 0.06, ease: "back.out(2)" }, 7.0);
+      [["#st1", 8.3, 10.38], ["#st2", 10.38, 12.24], ["#st3", 12.24, 14.04], ["#st4", 14.04, 99]].forEach(([c, t, e]) => {
+        tl.set(c, { className: "chip on" }, t); tl.fromTo(c, { scale: 1.3 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        if (e < 99) tl.set(c, { className: "chip done" }, e);
+      });
+      ["#L1", "#L2", "#L3", "#L4"].forEach((l, i) => pop(l + " .sub", [8.32, 10.4, 12.26, 14.06][i], { y: 30 }));
+      /* 48C */
+      slam("#goodH", 15.24);
+      tl.from("#tempBadge", { y: -60, opacity: 0, duration: 0.35, ease: "back.out(1.7)" }, 15.5);
+      count("tempNum", 48, 16.08, 1.0);
+      tl.fromTo("#merc", { attr: { y: 120, height: 10 } }, { attr: { y: 30, height: 100 }, duration: 1.0, ease: "power2.out" }, 16.08);
+      pop("#lockS", 16.56, { y: 30 });
+      tl.fromTo("#shackle", { y: -20 }, { y: 0, duration: 0.16, ease: "power4.in", immediateRender: false }, 16.7);
+      tl.fromTo("#tempBadge", { boxShadow: "0 0 0 rgba(255,106,26,0)" }, { boxShadow: "0 0 50px rgba(255,106,26,0.9)", duration: 0.3, yoyo: true, repeat: 3, immediateRender: false }, 17.14);
+      /* safe */
+      pop("#shield", 18.64); tl.to("#shCheck", { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.out" }, 18.95);
+      slam("#safeH", 18.74); pop("#safeS", 19.9, { y: 30 });
+      /* cost */
+      pop("#bolt", 20.98); tl.to("#bolt", { scale: 1.15, duration: 0.15, yoyo: true, repeat: 5, ease: "sine.inOut" }, 21.3);
+      slam("#costH", 21.16);
+      tl.from("#costCard", { y: 60, opacity: 0, duration: 0.35, ease: "back.out(2)" }, 22.9);
+      count("senNum", 10, 24.2, 0.5);
+      tl.fromTo("#costCard", { scale: 1 }, { scale: 1.12, duration: 0.14, yoyo: true, repeat: 1, immediateRender: false }, 24.66);
+      /* where */
+      slam("#whereH", 25.56);
+      pop("#homeS", 25.94, { x: -300, scale: 0.8 });
+      pop("#travS", 27.26, { x: 300, scale: 0.8 });
+      /* stock */
+      tl.from("#stockH .sub", { scale: 3, opacity: 0, rotation: -15, duration: 0.3, ease: "power4.out" }, 28.34);
+      tl.to("#stockH .sub", { rotation: 2, duration: 0.07, yoyo: true, repeat: 9, ease: "none" }, 28.7);
+      /* CTA */
+      slam("#soldS", 29.86);
+      tl.from("#ctaWrap", { y: 600, opacity: 0, duration: 0.45, ease: "back.out(1.4)" }, 31.1);
+      pop("#begS", 31.64, { y: 30 });
+      tl.from("#bag", { scale: 0, rotation: -30, duration: 0.3, ease: "back.out(2.5)" }, 31.78);
+      tl.to("#bag", { y: -16, duration: 0.2, yoyo: true, repeat: 2, ease: "sine.inOut" }, 32.08);
+      tl.from("#arrows", { opacity: 0, duration: 0.12 }, 31.86);
+      tl.fromTo("#arrows .ar", { opacity: 0.15 }, { opacity: 1, duration: 0.12, stagger: 0.08, repeat: 3, yoyo: true, ease: "none", immediateRender: false }, 31.86);
+
+      /* captions */
+      hl("#w0_0", 0.000, "cw");
+      hl("#w0_1", 0.440, "cw emph");
+      hl("#w0_2", 0.680, "cw emph");
+      hl("#w0_3", 0.960, "cw");
+      tl.from("#cap0", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 0.000);
+      hl("#w1_0", 1.400, "cw");
+      hl("#w1_1", 1.560, "cw emph");
+      hl("#w1_2", 1.820, "cw");
+      hl("#w1_3", 2.160, "cw emph");
+      tl.from("#cap1", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 1.400);
+      hl("#w2_0", 2.400, "cw");
+      hl("#w2_1", 2.640, "cw emph");
+      hl("#w2_2", 2.880, "cw emph");
+      tl.from("#cap2", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 2.400);
+      hl("#w3_0", 3.380, "cw");
+      hl("#w3_1", 3.500, "cw");
+      hl("#w3_2", 3.720, "cw");
+      hl("#w3_3", 3.880, "cw");
+      tl.from("#cap3", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 3.380);
+      hl("#w4_0", 4.520, "cw");
+      hl("#w4_1", 4.720, "cw emph");
+      hl("#w4_2", 5.060, "cw");
+      tl.from("#cap4", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 4.520);
+      hl("#w5_0", 5.380, "cw");
+      hl("#w5_1", 5.560, "cw emph");
+      hl("#w5_2", 5.800, "cw");
+      tl.from("#cap5", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 5.380);
+      hl("#w6_0", 5.960, "cw");
+      hl("#w6_1", 6.120, "cw");
+      hl("#w6_2", 6.400, "cw");
+      tl.from("#cap6", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 5.960);
+      hl("#w7_0", 6.920, "cw");
+      hl("#w7_1", 7.000, "cw");
+      hl("#w7_2", 7.220, "cw");
+      tl.from("#cap7", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 6.920);
+      hl("#w8_0", 7.400, "cw emph");
+      hl("#w8_1", 7.740, "cw");
+      tl.from("#cap8", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 7.400);
+      hl("#w9_0", 8.140, "cw");
+      hl("#w9_1", 8.300, "cw emph");
+      hl("#w9_2", 8.640, "cw emph");
+      tl.from("#cap9", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 8.140);
+      hl("#w10_0", 8.900, "cw");
+      hl("#w10_1", 9.060, "cw");
+      hl("#w10_2", 9.400, "cw");
+      tl.from("#cap10", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 8.900);
+      hl("#w11_0", 10.380, "cw");
+      hl("#w11_1", 10.480, "cw emph");
+      hl("#w11_2", 10.860, "cw");
+      tl.from("#cap11", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 10.380);
+      hl("#w12_0", 11.060, "cw emph");
+      hl("#w12_1", 11.280, "cw");
+      hl("#w12_2", 11.520, "cw");
+      tl.from("#cap12", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 11.060);
+      hl("#w13_0", 12.240, "cw");
+      hl("#w13_1", 12.340, "cw");
+      hl("#w13_2", 12.440, "cw");
+      hl("#w13_3", 12.680, "cw");
+      tl.from("#cap13", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 12.240);
+      hl("#w14_0", 12.840, "cw");
+      hl("#w14_1", 12.960, "cw emph");
+      hl("#w14_2", 13.260, "cw");
+      tl.from("#cap14", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 12.840);
+      hl("#w15_0", 14.040, "cw");
+      hl("#w15_1", 14.120, "cw");
+      hl("#w15_2", 14.360, "cw");
+      hl("#w15_3", 14.560, "cw emph");
+      tl.from("#cap15", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 14.040);
+      hl("#w16_0", 15.220, "cw");
+      hl("#w16_1", 15.320, "cw");
+      tl.from("#cap16", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 15.220);
+      hl("#w17_0", 16.080, "cw");
+      hl("#w17_1", 16.240, "cw");
+      hl("#w17_2", 16.400, "cw");
+      hl("#w17_3", 16.560, "cw emph");
+      tl.from("#cap17", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 16.080);
+      hl("#w18_0", 16.860, "cw");
+      hl("#w18_1", 17.140, "cw");
+      hl("#w18_2", 18.040, "cw");
+      tl.from("#cap18", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 16.860);
+      hl("#w19_0", 18.620, "cw");
+      hl("#w19_1", 18.740, "cw");
+      hl("#w19_2", 18.920, "cw");
+      tl.from("#cap19", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 18.620);
+      hl("#w20_0", 19.040, "cw");
+      hl("#w20_1", 19.120, "cw emph");
+      tl.from("#cap20", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 19.040);
+      hl("#w21_0", 19.900, "cw");
+      hl("#w21_1", 20.120, "cw");
+      hl("#w21_2", 20.260, "cw emph");
+      tl.from("#cap21", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 19.900);
+      hl("#w22_0", 20.960, "cw");
+      hl("#w22_1", 21.160, "cw");
+      hl("#w22_2", 21.320, "cw");
+      tl.from("#cap22", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 20.960);
+      hl("#w23_0", 21.720, "cw");
+      hl("#w23_1", 22.040, "cw emph");
+      hl("#w23_2", 22.400, "cw");
+      tl.from("#cap23", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 21.720);
+      hl("#w24_0", 22.900, "cw");
+      hl("#w24_1", 23.120, "cw");
+      hl("#w24_2", 23.220, "cw");
+      tl.from("#cap24", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 22.900);
+      hl("#w25_0", 23.420, "cw");
+      hl("#w25_1", 23.720, "cw");
+      tl.from("#cap25", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 23.420);
+      hl("#w26_0", 24.180, "cw");
+      hl("#w26_1", 24.260, "cw");
+      hl("#w26_2", 24.440, "cw emph");
+      tl.from("#cap26", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 24.180);
+      hl("#w27_0", 24.660, "cw emph");
+      hl("#w27_1", 24.820, "cw");
+      hl("#w27_2", 24.960, "cw");
+      tl.from("#cap27", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 24.660);
+      hl("#w28_0", 25.540, "cw");
+      hl("#w28_1", 25.580, "cw");
+      hl("#w28_2", 25.760, "cw");
+      tl.from("#cap28", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 25.540);
+      hl("#w29_0", 25.940, "cw emph");
+      hl("#w29_1", 26.180, "cw");
+      tl.from("#cap29", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 25.940);
+      hl("#w30_0", 26.980, "cw");
+      hl("#w30_1", 27.100, "cw");
+      hl("#w30_2", 27.260, "cw");
+      hl("#w30_3", 27.440, "cw emph");
+      tl.from("#cap30", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 26.980);
+      hl("#w31_0", 27.660, "cw");
+      hl("#w31_1", 27.840, "cw emph");
+      hl("#w31_2", 28.100, "cw");
+      tl.from("#cap31", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 27.660);
+      hl("#w32_0", 28.320, "cw emph");
+      hl("#w32_1", 28.860, "cw");
+      hl("#w32_2", 28.980, "cw");
+      tl.from("#cap32", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 28.320);
+      hl("#w33_0", 29.060, "cw emph");
+      hl("#w33_1", 29.320, "cw");
+      tl.from("#cap33", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 29.060);
+      hl("#w34_0", 29.840, "cw");
+      hl("#w34_1", 30.080, "cw emph");
+      hl("#w34_2", 30.260, "cw emph");
+      tl.from("#cap34", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 29.840);
+      hl("#w35_0", 30.780, "cw");
+      hl("#w35_1", 30.920, "cw");
+      hl("#w35_2", 31.100, "cw");
+      hl("#w35_3", 31.260, "cw");
+      tl.from("#cap35", { y: 16, scale: 0.86, opacity: 0, duration: 0.14, ease: "back.out(2)" }, 30.780);
+
+      /* explicit clip visibility (render-path independent) */
+      document.querySelectorAll("#root [data-start]:not(video):not(audio)").forEach((el) => {
+        const st = parseFloat(el.dataset.start), du = parseFloat(el.dataset.duration);
+        tl.set(el, { visibility: st > 0 ? "hidden" : "visible" }, 0);
+        if (st > 0) tl.set(el, { visibility: "visible" }, st);
+        if (st + du < 32.4 - 0.001) tl.set(el, { visibility: "hidden" }, st + du);
+      });
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
