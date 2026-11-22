@@ -39,4 +39,6 @@ Hanya visual asal (skrin hitam). VO tidak dipotong.
 | 28.32–29.84 | kasut neon | pelekat merah besar "STOK DAH TAK BANYAK!" |
 | 29.84–32.40 | kasut UV | "SEBELUM SOLD OUT!" → kad kuning "CHECK OUT SEKARANG" + "DENGAN BEG KUNING" + beg + anak panah |
 
-Caption karaoke 40px, kata kunci kuning; berhenti bila kad CTA keluar. SFX rendah (SFX_GAIN 0.1) supaya VO jelas.
+Caption karaoke 40px, kata kunci kuning. **Caption tidak dipaparkan bila teks yang sama sudah ada pada grafik di atas**
+(caption yang kekal: "kalau kasut ataupun pakaian", "bila jemur kat luar", "untuk korang tau", "nak pakai pun", "senang je",
+"dekat batang ni", "pun senang sangat", "better korang check out"). SFX rendah (SFX_GAIN 0.1) supaya VO jelas.

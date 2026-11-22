@@ -51,10 +51,22 @@ for s in phr:
 CAP_END = 31.10  # CTA card takes over from "check out sekarang"
 chunks = [c for c in chunks if c[0][0] < CAP_END]
 
+# Captions already said by on-screen graphics are dropped (no duplicate text). Keyed by chunk start time.
+DUP = {0.00: "MUSIM HUJAN LEBAT NI!", 2.40: "LAMBAT KERING?", 4.52: "PENGERING PORTABLE", 5.38: "SESUAI SANGAT!",
+       8.14: "1 · MASUKKAN KASUT", 10.38: "2 · ATAU CELAH BAJU", 11.06: "2 · ATAU CELAH BAJU",
+       12.24: "3 · ON TIMER", 12.84: "3 · ON TIMER", 14.04: "4 · TUNGGU KERING", 15.22: "YANG BAGUSNYA",
+       16.08: "SUHU DAH LOCK", 16.86: "48°C", 18.62: "TAK PERLU RISAU", 19.04: "TAK PERLU RISAU", 19.90: "KAIN TAK ROSAK",
+       20.96: "KOS ELEKTRIK MURAH", 21.72: "KOS ELEKTRIK MURAH", 22.90: "1 JAM", 23.42: "1 JAM", 24.18: "≈ 10 SEN",
+       24.66: "≈ 10 SEN", 25.54: "DALAM RUMAH ✓", 25.94: "DALAM RUMAH ✓", 26.98: "BAWA TRAVEL ✓", 28.32: "STOK DAH TAK BANYAK!",
+       29.06: "STOK DAH TAK BANYAK!", 29.84: "SEBELUM SOLD OUT!"}
 cap_html, cap_js = [], []
+kept = []
 for ci, c in enumerate(chunks):
     st = c[0][0]
     en = chunks[ci + 1][0][0] if ci + 1 < len(chunks) else CAP_END
+    if any(abs(st - k) < 0.03 for k in DUP):
+        continue
+    kept.append(" ".join(w[2] for w in c))
     spans = []
     for wi, w in enumerate(c):
         cls = "cw emph" if w[2].lower() in EMPH else "cw"
@@ -92,4 +104,5 @@ out = (tpl.replace("<!--VIDEOS-->", "\n      ".join(vid_html))
           .replace("/*CAPJS*/", "\n      ".join(cap_js))
           .replace("__TOTAL__", str(TOTAL)))
 open(os.path.join(HERE, "index.html"), "w").write(out)
+print("kept captions:", kept)
 print(len(chunks), "caption chunks;", len(SCENES), "scenes;", len(SFX), "sfx")

@@ -59,3 +59,7 @@ Saiz ditetapkan terus dalam CSS (tanpa `.sc { transform: scale(...) }`).
 | Caption | 60px | **40px** | teks caption / label langkah di tengah skrin |
 | Nombor besar (cth. heart rate) | 96px | **64px** | kaunter 48°C, dial 120 / 30 minit |
 | Chip, nama warna, label zon | 28px | **19px** | chip KASUT/STOKIN/BAJU, item senarai langkah, pill kecil |
+
+## Caption vs grafik (diluluskan – Task 4)
+- Kalau tulisan dah ada pada grafik/overlay di atas, **jangan ulang dalam caption**: buang chunk caption itu
+  (dalam build.py: senarai `DUP`). Caption hanya untuk bahagian VO yang tiada teks grafik.
