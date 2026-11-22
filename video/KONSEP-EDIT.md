@@ -48,3 +48,14 @@ Gunakan konsep ini untuk setiap video VO/produk seterusnya, melainkan diminta la
   - Grafik lain dibungkus dalam `.sc { transform: scale(0.7) }` dengan transform-origin di bahagian atas grafik
     (kedudukan atas kekal, saiz mengecil ke bawah).
 - Rujukan: `video/task3/hyperframes-project/index.html`.
+
+## Format tulisan (TERKINI – guna untuk task seterusnya; mengatasi saiz di atas)
+Saiz ditetapkan terus dalam CSS (tanpa `.sc { transform: scale(...) }`).
+
+| Tulisan | Sebelum | Sekarang | Contoh elemen dalam template ini |
+|---|---|---|---|
+| Headline | 150px | **100px** | hook ("WAJIB BAWAK PERGI TRAVEL!"), "CARA GUNA", "GRAB CEPAT!", "SAIZ KOMPAK" |
+| Sub-headline / pelekat | 70px | **47px** | "( PENGERING PORTABLE )", "HARGA TENGAH MURAH!", label "LANGKAH N", "SUHU DAH LOCK" |
+| Caption | 60px | **40px** | teks caption / label langkah di tengah skrin |
+| Nombor besar (cth. heart rate) | 96px | **64px** | kaunter 48°C, dial 120 / 30 minit |
+| Chip, nama warna, label zon | 28px | **19px** | chip KASUT/STOKIN/BAJU, item senarai langkah, pill kecil |
