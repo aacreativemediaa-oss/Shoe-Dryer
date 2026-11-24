@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop800.woff2") format("woff2"); font-weight: 800; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop900.woff2") format("woff2"); font-weight: 900; }
+      :root {
+        --yellow: #ffd60a; --orange: #ff6a1a; --red: #ff2d3d; --green: #2bd96b; --blue: #3aa0ff; --dark: rgba(8,10,20,0.86);
+        /* approved type scale */
+        --t-head: 100px; --t-sub: 47px; --t-cap: 40px; --t-num: 64px; --t-chip: 19px;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05070d; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Poppins", sans-serif; color: #fff; }
+      .clip { position: absolute; inset: 0; }
+      video.clip { width: 1080px; height: 1920px; object-fit: cover; }
+      .layer { position: absolute; inset: 0; pointer-events: none; }
+      .top { position: absolute; left: 70px; right: 150px; top: 330px; text-align: center; }
+      .head { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: 0.98; font-size: var(--t-head); text-shadow: 0 5px 0 rgba(0,0,0,0.35), 0 10px 32px rgba(0,0,0,0.6); }
+      .head .y { color: var(--yellow); }
+      .sub { display: inline-block; font-family: "Anton", sans-serif; text-transform: uppercase; font-size: var(--t-sub); line-height: 1.05; padding: 6px 22px 10px; border-radius: 14px; }
+      .s-y { background: var(--yellow); color: #111; }
+      .s-r { background: var(--red); color: #fff; }
+      .s-d { background: var(--dark); color: #fff; }
+      .s-g { background: var(--green); color: #111; }
+      .tilt { transform: rotate(-3deg); }
+      .num { font-family: "Anton", sans-serif; font-size: var(--t-num); line-height: 1; }
+      .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: var(--dark); border: 3px solid rgba(255,255,255,0.3); font-weight: 900; font-size: var(--t-chip); color: rgba(255,255,255,0.8); white-space: nowrap; }
+      .chip .n { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+      .chip.on { background: var(--yellow); border-color: var(--yellow); color: #111; }
+      .chip.on .n { background: #111; color: var(--yellow); }
+      .chip.done { border-color: var(--green); color: #fff; }
+      .chip.done .n { background: var(--green); color: #111; }
+      .chip.tip { background: var(--yellow); border-color: var(--yellow); color: #111; }
+      .mt { margin-top: 18px; }
+      #vig { background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%); }
+      #shade { background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 38%, rgba(0,0,0,0) 100%); }
+      #flash { background: #fff; opacity: 0; }
+      .ico { display: block; margin: 0 auto 14px; }
+      #progress { position: absolute; left: 70px; right: 150px; top: 810px; display: flex; justify-content: center; gap: 8px; }
+      .stepNo { font-family: "Anton", sans-serif; text-transform: uppercase; font-size: var(--t-head); line-height: 0.98; text-shadow: 0 5px 0 rgba(0,0,0,0.35), 0 10px 32px rgba(0,0,0,0.6); }
+      .stepNo span { color: var(--yellow); }
+      .badge { display: inline-flex; align-items: center; gap: 12px; padding: 12px 26px 12px 18px; border-radius: 22px; background: var(--dark); border: 4px solid var(--orange); }
+      #tempU { color: var(--orange); }
+      .card { display: inline-flex; align-items: center; gap: 12px; padding: 12px 22px; border-radius: 22px; background: var(--dark); border: 4px solid var(--yellow); }
+      .card .num { color: var(--yellow); }
+      #grabCard { display: inline-block; background: var(--yellow); color: #111; border-radius: 24px; padding: 14px 34px 20px; box-shadow: 0 18px 50px rgba(0,0,0,0.5); }
+      #grabCard .head { text-shadow: none; }
+      #arrows { position: absolute; left: 425px; top: 1150px; width: 80px; }
+      #bag { position: absolute; left: 405px; top: 1300px; width: 120px; }
+      #dialWrap { position: relative; width: 190px; height: 190px; margin: 0 auto; }
+      #dialWrap svg { position: absolute; inset: 0; }
+      #dialC { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #dialU { font-weight: 900; font-size: var(--t-chip); letter-spacing: 0.12em; color: var(--yellow); }
+      .chips { display: flex; justify-content: center; gap: 8px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="28" data-width="1080" data-height="1920" data-fps="60">
+      <video id="v0"  class="clip" src="assets/video/lv0.mp4"      data-start="0"    data-duration="3.0" data-media-start="0.0"  muted playsinline></video>
+      <video id="v1"  class="clip" src="assets/video/lv0.mp4"      data-start="3.0"  data-duration="3.6" data-media-start="37.8" muted playsinline></video>
+      <video id="v2"  class="clip" src="assets/video/IMG_2344.mp4" data-start="6.6"  data-duration="2.0" data-media-start="12.0" muted playsinline></video>
+      <video id="v3"  class="clip" src="assets/video/IMG_2493.mp4" data-start="8.6"  data-duration="2.0" data-media-start="46.5" muted playsinline></video>
+      <video id="v4"  class="clip" src="assets/video/IMG_2344.mp4" data-start="10.6" data-duration="1.2" data-media-start="31.0" muted playsinline></video>
+      <video id="v5"  class="clip" src="assets/video/lv0.mp4"      data-start="11.8" data-duration="2.2" data-media-start="54.5" muted playsinline></video>
+      <video id="v6"  class="clip" src="assets/video/lv0.mp4"      data-start="14.0" data-duration="3.2" data-media-start="31.2" muted playsinline></video>
+      <video id="v7"  class="clip" src="assets/video/IMG_2344.mp4" data-start="17.2" data-duration="2.0" data-media-start="4.4"  muted playsinline></video>
+      <video id="v8"  class="clip" src="assets/video/IMG_2345.mp4" data-start="19.2" data-duration="1.6" data-media-start="7.8"  muted playsinline></video>
+      <video id="v9"  class="clip" src="assets/video/lv0.mp4"      data-start="20.8" data-duration="1.4" data-media-start="35.4" muted playsinline></video>
+      <video id="v10" class="clip" src="assets/video/IMG_2344.mp4" data-start="22.2" data-duration="1.8" data-media-start="0.5"  muted playsinline></video>
+      <video id="v11" class="clip" src="assets/video/lv0.mp4"      data-start="24.0" data-duration="2.1" data-media-start="10.0" muted playsinline></video>
+      <video id="v12" class="clip" src="assets/video/IMG_2345.mp4" data-start="26.1" data-duration="1.9" data-media-start="19.6" muted playsinline></video>
+
+      <div id="vig" class="layer clip" data-start="0" data-duration="28"></div>
+      <div id="shade" class="layer clip" data-start="0" data-duration="28"></div>
+
+      <!-- HOOK 0–3.0 -->
+      <div id="g0" class="layer clip" data-start="0" data-duration="3.0">
+        <div class="top"><div id="hookH" class="head">Pengering<br /><span class="y">portable</span></div>
+          <div id="hookS" class="mt"><span class="sub s-y tilt">Step by step &#8595;</span></div></div>
+      </div>
+
+      <!-- EDUCATION 3.0–14.0 -->
+      <div id="gP" class="layer clip" data-start="3.0" data-duration="11.0">
+        <div id="progress">
+          <div class="chip" id="p1"><span class="n">1</span>ANGKAT BATANG</div>
+          <div class="chip" id="p2"><span class="n">2</span>KASUT / STOKIN</div>
+          <div class="chip" id="p3"><span class="n">3</span>SET TIMER</div>
+        </div>
+      </div>
+      <div id="g1" class="layer clip" data-start="3.0" data-duration="3.6">
+        <div class="top"><div class="stepNo">Step <span>1</span></div>
+          <div class="mt"><span class="sub s-d">Angkat dua-dua<br />batang pengering</span></div></div>
+      </div>
+      <div id="g2" class="layer clip" data-start="6.6" data-duration="4.0">
+        <div class="top"><div class="stepNo">Step <span>2</span></div>
+          <div class="mt"><span class="sub s-d">Masukkan kasut atau stokin<br />pada batang</span></div>
+          <div class="mt chips"><span class="chip" id="cK">KASUT</span><span class="chip" id="cS">STOKIN</span></div></div>
+      </div>
+      <div id="g3" class="layer clip" data-start="10.6" data-duration="3.4">
+        <div class="top"><div class="stepNo">Step <span>3</span></div>
+          <div class="mt"><span class="sub s-d">Set timer</span></div>
+          <div class="mt"><div id="dialWrap"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="178" fill="rgba(8,10,20,0.86)"/><circle cx="200" cy="200" r="160" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="26"/><circle id="dialArc" cx="200" cy="200" r="160" fill="none" stroke="#ffd60a" stroke-width="26" stroke-linecap="round" transform="rotate(-90 200 200)" stroke-dasharray="1005.3" stroke-dashoffset="1005.3"/></svg>
+            <div id="dialC"><div class="num" id="dialNum">0</div><div id="dialU">MINIT</div></div></div></div>
+          <div class="mt"><span class="chip tip">MAKSIMUM 120 MINIT</span></div></div>
+      </div>
+
+      <!-- USP 1: 48C 14.0–17.2 -->
+      <div id="g4" class="layer clip" data-start="14.0" data-duration="3.2">
+        <div class="top"><div id="u1H" class="head">Suhu dah <span class="y">lock</span></div>
+          <div class="mt"><div class="badge" id="tempBadge"><svg width="34" height="84" viewBox="0 0 70 170"><rect x="22" y="6" width="26" height="120" rx="13" fill="none" stroke="#fff" stroke-width="7"/><rect id="merc" x="29" y="40" width="12" height="90" rx="6" fill="#ff6a1a"/><circle cx="35" cy="140" r="26" fill="#ff6a1a" stroke="#fff" stroke-width="7"/></svg><div class="num" id="tempNum">0</div><div class="num" id="tempU">&deg;C</div><svg width="30" height="36" viewBox="0 0 92 110"><path id="shackle" d="M22 52 V32 a24 24 0 0 1 48 0 V52" fill="none" stroke="#ffd60a" stroke-width="12" stroke-linecap="round"/><rect x="8" y="50" width="76" height="58" rx="12" fill="#ffd60a"/></svg></div></div></div>
+      </div>
+      <!-- USP 2: 200W 17.2–20.8 -->
+      <div id="g5" class="layer clip" data-start="17.2" data-duration="3.6">
+        <div class="top">
+          <svg class="ico" id="bolt" width="70" height="96" viewBox="0 0 80 110"><path d="M48 4 L10 62 H36 L28 106 L70 40 H44 Z" fill="#ffd60a" stroke="#111" stroke-width="5" stroke-linejoin="round"/></svg>
+          <div id="u2H" class="head">Power <span class="y"><span id="wNum">0</span>W</span><br />sahaja</div>
+          <div id="u2C" class="mt"><div class="card"><span class="chip">KOS ELEKTRIK</span><div class="num">&plusmn; RM0.10</div><span class="chip on">SEJAM</span></div></div>
+        </div>
+      </div>
+      <!-- USP 3: compact 20.8–24.0 -->
+      <div id="g6" class="layer clip" data-start="20.8" data-duration="3.2">
+        <div class="top"><svg class="ico" id="resize" width="90" height="90" viewBox="0 0 120 120"><rect x="34" y="34" width="52" height="52" rx="10" fill="#ffd60a"/><g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30 V8 H30"/><path d="M8 8 L30 30"/><path d="M112 90 V112 H90"/><path d="M112 112 L90 90"/></g></svg>
+          <div id="u3H" class="head">Saiz <span class="y">kompak</span></div>
+          <div id="u3S" class="mt"><span class="sub s-y">Senang bawak travel</span></div>
+          <svg id="plane" width="120" height="60" viewBox="-30 -45 190 90" style="display:block;margin:14px auto 0"><path d="M0 -14 L70 -6 L100 -40 L116 -40 L100 -4 L150 0 L100 4 L116 40 L100 40 L70 6 L0 14 L-10 30 L-24 30 L-14 0 L-24 -30 L-10 -30 Z" fill="#fff" stroke="#111" stroke-width="5" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <!-- CTA 24.0–28.0 -->
+      <div id="g7" class="layer clip" data-start="24.0" data-duration="4.0">
+        <div class="top"><div id="murahS"><span class="sub s-r tilt">Harga tengah murah!</span></div>
+          <div id="grabW" class="mt"><div id="grabCard"><div class="head">Grab cepat!</div></div></div>
+          <div id="linkS" class="mt"><span class="sub s-d">Kat link <span style="color:var(--yellow)">bawah</span></span></div>
+        </div>
+        <svg id="arrows" viewBox="0 0 120 200"><path class="ar" d="M15 20 L60 60 L105 20" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 80 L60 120 L105 80" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 140 L60 180 L105 140" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg id="bag" viewBox="0 0 170 170"><path d="M52 62 V48 a33 33 0 0 1 66 0 V62" fill="none" stroke="#111" stroke-width="11" stroke-linecap="round"/><path d="M22 58 H148 L138 158 H32 Z" fill="#ffd60a" stroke="#111" stroke-width="9" stroke-linejoin="round"/><path d="M60 98 a25 25 0 0 0 50 0" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/></svg>
+      </div>
+
+      <div id="flash" class="layer clip" data-start="0" data-duration="28"></div>
+
+      <!-- SFX (no VO, no music) -->
+      <audio id="s0"  src="assets/sfx/impact.wav"  data-start="0"     data-duration="1.2"  data-volume="0.5"></audio>
+      <audio id="s1"  src="assets/sfx/whoosh.wav"  data-start="0.05"  data-duration="0.55" data-volume="0.5"></audio>
+      <audio id="s2"  src="assets/sfx/pop.wav"     data-start="0.8"   data-duration="0.12" data-volume="0.55"></audio>
+      <audio id="s3"  src="assets/sfx/riser.wav"   data-start="1.7"   data-duration="1.3"  data-volume="0.3"></audio>
+      <audio id="s4"  src="assets/sfx/swipe.wav"   data-start="2.95"  data-duration="0.3"  data-volume="0.5"></audio>
+      <audio id="s5"  src="assets/sfx/pop.wav"     data-start="3.1"   data-duration="0.12" data-volume="0.55"></audio>
+      <audio id="s6"  src="assets/sfx/whoosh.wav"  data-start="3.8"   data-duration="0.55" data-volume="0.35"></audio>
+      <audio id="s7"  src="assets/sfx/whoosh.wav"  data-start="5.2"   data-duration="0.55" data-volume="0.35"></audio>
+      <audio id="s8"  src="assets/sfx/swipe.wav"   data-start="6.55"  data-duration="0.3"  data-volume="0.5"></audio>
+      <audio id="s9"  src="assets/sfx/pop.wav"     data-start="6.7"   data-duration="0.12" data-volume="0.55"></audio>
+      <audio id="s10" src="assets/sfx/pop.wav"     data-start="7.2"   data-duration="0.12" data-volume="0.5"></audio>
+      <audio id="s11" src="assets/sfx/pop.wav"     data-start="8.7"   data-duration="0.12" data-volume="0.5"></audio>
+      <audio id="s12" src="assets/sfx/swipe.wav"   data-start="10.55" data-duration="0.3"  data-volume="0.5"></audio>
+      <audio id="s13" src="assets/sfx/pop.wav"     data-start="10.7"  data-duration="0.12" data-volume="0.55"></audio>
+      <audio id="s14" src="assets/sfx/tick.wav"    data-start="11.4"  data-duration="0.05" data-volume="0.5"></audio>
+      <audio id="s15" src="assets/sfx/tick.wav"    data-start="11.65" data-duration="0.05" data-volume="0.5"></audio>
+      <audio id="s16" src="assets/sfx/tick.wav"    data-start="11.9"  data-duration="0.05" data-volume="0.5"></audio>
+      <audio id="s17" src="assets/sfx/tick.wav"    data-start="12.15" data-duration="0.05" data-volume="0.5"></audio>
+      <audio id="s18" src="assets/sfx/ding.wav"    data-start="12.5"  data-duration="1.3"  data-volume="0.45"></audio>
+      <audio id="s19" src="assets/sfx/whoosh.wav"  data-start="13.95" data-duration="0.55" data-volume="0.45"></audio>
+      <audio id="s20" src="assets/sfx/tick.wav"    data-start="14.6"  data-duration="0.05" data-volume="0.5"></audio>
+      <audio id="s21" src="assets/sfx/tick.wav"    data-start="14.85" data-duration="0.05" data-volume="0.5"></audio>
+      <audio id="s22" src="assets/sfx/impact.wav"  data-start="15.5"  data-duration="0.6"  data-volume="0.3"></audio>
+      <audio id="s23" src="assets/sfx/ding.wav"    data-start="15.55" data-duration="1.3"  data-volume="0.45"></audio>
+      <audio id="s24" src="assets/sfx/whoosh.wav"  data-start="17.15" data-duration="0.55" data-volume="0.45"></audio>
+      <audio id="s25" src="assets/sfx/tick.wav"    data-start="17.7"  data-duration="0.05" data-volume="0.5"></audio>
+      <audio id="s26" src="assets/sfx/tick.wav"    data-start="17.95" data-duration="0.05" data-volume="0.5"></audio>
+      <audio id="s27" src="assets/sfx/pop.wav"     data-start="18.7"  data-duration="0.12" data-volume="0.55"></audio>
+      <audio id="s28" src="assets/sfx/kaching.wav" data-start="18.85" data-duration="1.2"  data-volume="0.5"></audio>
+      <audio id="s29" src="assets/sfx/swipe.wav"   data-start="20.75" data-duration="0.3"  data-volume="0.5"></audio>
+      <audio id="s30" src="assets/sfx/pop.wav"     data-start="21.5"  data-duration="0.12" data-volume="0.55"></audio>
+      <audio id="s31" src="assets/sfx/whoosh.wav"  data-start="22.2"  data-duration="0.55" data-volume="0.45"></audio>
+      <audio id="s32" src="assets/sfx/impact.wav"  data-start="24.0"  data-duration="1.0"  data-volume="0.55"></audio>
+      <audio id="s33" src="assets/sfx/whoosh.wav"  data-start="24.6"  data-duration="0.55" data-volume="0.45"></audio>
+      <audio id="s34" src="assets/sfx/kaching.wav" data-start="24.9"  data-duration="1.2"  data-volume="0.5"></audio>
+      <audio id="s35" src="assets/sfx/pop.wav"     data-start="25.6"  data-duration="0.12" data-volume="0.55"></audio>
+      <audio id="s36" src="assets/sfx/pop.wav"     data-start="26.1"  data-duration="0.12" data-volume="0.6"></audio>
+      <audio id="s37" src="assets/sfx/ding.wav"    data-start="26.4"  data-duration="1.3"  data-volume="0.35"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const punch = (s, t, f = 1.12, d = 0.3) => tl.fromTo(s, { scale: f }, { scale: 1, duration: d, ease: "power3.out" }, t);
+      const drift = (s, t, d) => tl.fromTo(s, { scale: 1 }, { scale: 1.07, duration: d, ease: "none", immediateRender: false }, t);
+      const flash = (t, a) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: 0.18, ease: "power2.out", immediateRender: false }, t);
+      const pop = (s, t, extra = {}) => tl.from(s, Object.assign({ scale: 0.3, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, extra), t);
+      const slam = (s, t) => tl.from(s, { scale: 2.2, opacity: 0, duration: 0.3, ease: "power4.out" }, t);
+      const count = (id, to, t, d) => { const o = { v: 0 }; tl.to(o, { v: to, duration: d, ease: "power2.out", onUpdate: () => { document.getElementById(id).textContent = Math.round(o.v); } }, t); };
+
+      document.querySelectorAll("video.clip").forEach((v, i) => {
+        const s = parseFloat(v.dataset.start), d = parseFloat(v.dataset.duration);
+        punch(v, s); drift(v, s + 0.3, Math.max(0.1, d - 0.3));
+        if (i) flash(s, 0.35);
+      });
+      flash(24.0, 0.8);
+
+      /* hook */
+      tl.fromTo("#hookH", { scale: 1.6 }, { scale: 1, duration: 0.3, ease: "power4.out" }, 0);
+      tl.from("#hookS .sub", { scale: 2.4, opacity: 0, rotation: -10, duration: 0.32, ease: "power4.out" }, 0.8);
+      tl.fromTo("#hookS .sub", { y: 0 }, { y: 10, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false }, 1.3);
+      tl.to("#g0", { scale: 1.25, opacity: 0, duration: 0.14, ease: "power2.in" }, 2.86);
+
+      /* education: text lands at once, then holds >=1s before the next point */
+      tl.from("#progress .chip", { y: -30, opacity: 0, duration: 0.25, stagger: 0.06, ease: "back.out(2)" }, 3.02);
+      [["#p1", 3.0, 6.6], ["#p2", 6.6, 10.6], ["#p3", 10.6, 99]].forEach(([c, t, e]) => {
+        tl.set(c, { className: "chip on" }, t); tl.fromTo(c, { scale: 1.35 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        if (e < 99) tl.set(c, { className: "chip done" }, e);
+      });
+      ["#g1", "#g2", "#g3"].forEach((g, i) => {
+        const t = [3.0, 6.6, 10.6][i];
+        slam(g + " .stepNo", t + 0.05);
+        tl.from(g + " .sub", { y: 40, opacity: 0, duration: 0.3, ease: "back.out(2)" }, t + 0.2);
+      });
+      tl.set("#cK", { className: "chip on" }, 7.2); tl.fromTo("#cK", { scale: 1.4 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 7.2);
+      tl.set("#cS", { className: "chip on" }, 8.7); tl.fromTo("#cS", { scale: 1.4 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 8.7);
+      pop("#dialWrap", 10.9);
+      count("dialNum", 120, 11.3, 1.1);
+      tl.to("#dialArc", { attr: { "stroke-dashoffset": 0 }, duration: 1.1, ease: "power2.out" }, 11.3);
+      pop("#g3 .chip", 12.45, { y: 20 });
+
+      /* USP 1 */
+      slam("#u1H", 14.02);
+      tl.from("#tempBadge", { y: -50, opacity: 0, duration: 0.35, ease: "back.out(1.7)" }, 14.3);
+      count("tempNum", 48, 14.55, 0.85);
+      tl.fromTo("#merc", { attr: { y: 120, height: 10 } }, { attr: { y: 30, height: 100 }, duration: 0.85, ease: "power2.out" }, 14.55);
+      tl.fromTo("#shackle", { y: -22 }, { y: 0, duration: 0.16, ease: "power4.in", immediateRender: false }, 15.45);
+      tl.fromTo("#tempBadge", { boxShadow: "0 0 0 rgba(255,106,26,0)" }, { boxShadow: "0 0 50px rgba(255,106,26,0.9)", duration: 0.3, yoyo: true, repeat: 3, immediateRender: false }, 15.55);
+      /* USP 2 */
+      pop("#bolt", 17.22); tl.to("#bolt", { scale: 1.15, duration: 0.15, yoyo: true, repeat: 5, ease: "sine.inOut" }, 17.5);
+      slam("#u2H", 17.3); count("wNum", 200, 17.5, 0.7);
+      tl.from("#u2C", { y: 50, opacity: 0, duration: 0.35, ease: "back.out(2)" }, 18.6);
+      tl.fromTo("#u2C .card", { scale: 1 }, { scale: 1.08, duration: 0.14, yoyo: true, repeat: 1, immediateRender: false }, 19.05);
+      /* USP 3 */
+      pop("#resize", 20.82); tl.fromTo("#resize", { scale: 1.3 }, { scale: 0.85, duration: 0.45, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false }, 21.15);
+      slam("#u3H", 20.9); pop("#u3S", 21.5, { y: 30 });
+      tl.fromTo("#plane", { x: -500, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 22.1);
+      tl.to("#plane", { x: 500, opacity: 0, duration: 0.5, ease: "power2.in" }, 23.3);
+      /* CTA */
+      tl.from("#murahS .sub", { scale: 2.6, opacity: 0, rotation: -12, duration: 0.3, ease: "power4.out" }, 24.02);
+      tl.to("#murahS .sub", { rotation: 1, duration: 0.07, yoyo: true, repeat: 7, ease: "none" }, 24.35);
+      tl.from("#grabW", { y: 600, opacity: 0, duration: 0.45, ease: "back.out(1.4)" }, 24.6);
+      tl.to("#grabCard", { scale: 1.05, duration: 0.3, yoyo: true, repeat: 9, ease: "sine.inOut" }, 25.2);
+      pop("#linkS", 25.6, { y: 30 });
+      tl.from("#arrows", { opacity: 0, duration: 0.15 }, 26.0);
+      tl.fromTo("#arrows .ar", { opacity: 0.15 }, { opacity: 1, duration: 0.15, stagger: 0.1, repeat: 7, yoyo: true, ease: "none", immediateRender: false }, 26.0);
+      tl.to("#arrows", { y: 22, duration: 0.3, yoyo: true, repeat: 5, ease: "sine.inOut" }, 26.0);
+      tl.from("#bag", { scale: 0, rotation: -30, duration: 0.35, ease: "back.out(2.5)" }, 26.1);
+      tl.to("#bag", { y: -16, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut" }, 26.5);
+
+      /* explicit clip visibility (render-path independent) */
+      document.querySelectorAll("#root [data-start]:not(video):not(audio)").forEach((el) => {
+        const st = parseFloat(el.dataset.start), du = parseFloat(el.dataset.duration);
+        tl.set(el, { visibility: st > 0 ? "hidden" : "visible" }, 0);
+        if (st > 0) tl.set(el, { visibility: "visible" }, st);
+        if (st + du < 28 - 0.001) tl.set(el, { visibility: "hidden" }, st + du);
+      });
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -63,3 +63,7 @@ Saiz ditetapkan terus dalam CSS (tanpa `.sc { transform: scale(...) }`).
 ## Caption vs grafik (diluluskan – Task 4)
 - Kalau tulisan dah ada pada grafik/overlay di atas, **jangan ulang dalam caption**: buang chunk caption itu
   (dalam build.py: senarai `DUP`). Caption hanya untuk bahagian VO yang tiada teks grafik.
+
+## Rentak point (diluluskan – Task 6)
+- Jangan tukar point terlalu cepat: setiap langkah/USP dipegang ~3–4 saat, dan teks mesti kekal **sekurang-kurangnya
+  1 saat** selepas siap muncul sebelum tukar ke point seterusnya.
