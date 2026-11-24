@@ -91,3 +91,9 @@ Diukur dari video contoh (kanvas 1080x1920; saiz font dikira dari tinggi huruf: 
 - Setiap step: **5.5–6 saat**; setiap USP: **5–5.5 saat**; CTA: **~5 saat**; hook ~3 saat.
 - Elemen dalam satu point muncul berperingkat, dan point kekal sekurang-kurangnya ~2 saat selepas elemen terakhir muncul.
 - Kalau shot footage terlalu pendek, perlahankan (setpts + minterpolate blend) atau sambung dengan shot kedua yang sepadan.
+
+## Footage (TERKINI – Task 6 v4; mengatasi "Rentak bacaan" di atas)
+- **Satu shot sahaja untuk setiap point**; jangan tukar shot banyak kali dalam satu point.
+- Footage dimainkan lama pada kelajuan asal (pilih shot yang cukup panjang; elak slow-mo).
+- **Tiada close-up**: pilih shot lebar/medium; tiada punch-in/zoom pada footage (hanya flash lembut pada cut).
+- Panjang setiap point ~4.5–5.5s (hook ~3s) — footage yang lama, bukan point yang dipanjangkan.
