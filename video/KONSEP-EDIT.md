@@ -86,3 +86,8 @@ Diukur dari video contoh (kanvas 1080x1920; saiz font dikira dari tinggi huruf: 
 - Panel/kad infografik besar: lebar ~600–880px (sehingga ~80% skrin), radius ~30px, latar gelap lut sinar,
   bayang keras di bawah (0 12px 0 hitam). Kandungan di tengah, bermula sekitar y 300–440.
 - Rujukan pelaksanaan: `video/task6/hyperframes-project/index.html` (pembolehubah CSS `--t-*`).
+
+## Rentak bacaan (TERKINI – Task 6 v3; mengatasi "Rentak point" di atas)
+- Setiap step: **5.5–6 saat**; setiap USP: **5–5.5 saat**; CTA: **~5 saat**; hook ~3 saat.
+- Elemen dalam satu point muncul berperingkat, dan point kekal sekurang-kurangnya ~2 saat selepas elemen terakhir muncul.
+- Kalau shot footage terlalu pendek, perlahankan (setpts + minterpolate blend) atau sambung dengan shot kedua yang sepadan.
