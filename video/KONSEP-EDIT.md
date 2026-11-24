@@ -67,3 +67,22 @@ Saiz ditetapkan terus dalam CSS (tanpa `.sc { transform: scale(...) }`).
 ## Rentak point (diluluskan – Task 6)
 - Jangan tukar point terlalu cepat: setiap langkah/USP dipegang ~3–4 saat, dan teks mesti kekal **sekurang-kurangnya
   1 saat** selepas siap muncul sebelum tukar ke point seterusnya.
+
+## Proportion infografik & teks (TERKINI – ikut video contoh V-Stepper; mengatasi format tulisan sebelum ini)
+Diukur dari video contoh (kanvas 1080x1920; saiz font dikira dari tinggi huruf: Anton cap = 0.859em, Poppins 900 cap = 0.713em).
+
+| Elemen | Saiz |
+|---|---|
+| Headline utama (Anton) | **100px** |
+| Headline kedua (Anton) | **75px** |
+| Sub-headline / pelekat (Anton, latar warna, bayang keras 8px) | **64px** |
+| Nombor data (cth. 55KG / ±110) | **64px** |
+| Nombor hero (cth. 2027, 5.9KG, 48°C, 120) | **92px** |
+| Chip (Poppins 900, tinggi ~66px, bulatan ikon 42px) | **34px** |
+| Label kecil panel (Poppins 900, letter-spacing 0.15em) | **24px** |
+| Nota kaki (Poppins 700) | ~21px |
+| Caption VO | 40px |
+
+- Panel/kad infografik besar: lebar ~600–880px (sehingga ~80% skrin), radius ~30px, latar gelap lut sinar,
+  bayang keras di bawah (0 12px 0 hitam). Kandungan di tengah, bermula sekitar y 300–440.
+- Rujukan pelaksanaan: `video/task6/hyperframes-project/index.html` (pembolehubah CSS `--t-*`).

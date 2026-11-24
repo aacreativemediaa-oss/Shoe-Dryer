@@ -12,7 +12,7 @@
       :root {
         --yellow: #ffd60a; --orange: #ff6a1a; --red: #ff2d3d; --green: #2bd96b; --blue: #3aa0ff; --dark: rgba(8,10,20,0.86);
         /* approved type scale */
-        --t-head: 100px; --t-sub: 47px; --t-cap: 40px; --t-num: 64px; --t-chip: 19px;
+        --t-head: 100px; --t-head2: 75px; --t-sub: 64px; --t-cap: 40px; --t-num: 64px; --t-hero: 92px; --t-chip: 34px; --t-label: 24px;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05070d; }
@@ -20,43 +20,45 @@
       .clip { position: absolute; inset: 0; }
       video.clip { width: 1080px; height: 1920px; object-fit: cover; }
       .layer { position: absolute; inset: 0; pointer-events: none; }
-      .top { position: absolute; left: 70px; right: 150px; top: 330px; text-align: center; }
+      .top { position: absolute; left: 90px; right: 110px; top: 330px; text-align: center; }
       .head { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: 0.98; font-size: var(--t-head); text-shadow: 0 5px 0 rgba(0,0,0,0.35), 0 10px 32px rgba(0,0,0,0.6); }
       .head .y { color: var(--yellow); }
-      .sub { display: inline-block; font-family: "Anton", sans-serif; text-transform: uppercase; font-size: var(--t-sub); line-height: 1.05; padding: 6px 22px 10px; border-radius: 14px; }
+      .sub { display: inline-block; font-family: "Anton", sans-serif; text-transform: uppercase; font-size: var(--t-sub); line-height: 1.05; padding: 8px 28px 12px; border-radius: 16px; box-shadow: 8px 8px 0 rgba(0,0,0,0.85); }
       .s-y { background: var(--yellow); color: #111; }
       .s-r { background: var(--red); color: #fff; }
       .s-d { background: var(--dark); color: #fff; }
       .s-g { background: var(--green); color: #111; }
       .tilt { transform: rotate(-3deg); }
       .num { font-family: "Anton", sans-serif; font-size: var(--t-num); line-height: 1; }
-      .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: var(--dark); border: 3px solid rgba(255,255,255,0.3); font-weight: 900; font-size: var(--t-chip); color: rgba(255,255,255,0.8); white-space: nowrap; }
-      .chip .n { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+      .chip { display: inline-flex; align-items: center; gap: 10px; padding: 10px 24px 10px 12px; border-radius: 999px; background: var(--dark); border: 4px solid rgba(255,255,255,0.3); font-weight: 900; font-size: var(--t-chip); color: rgba(255,255,255,0.8); white-space: nowrap; }
+      .chip .n { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 24px; }
       .chip.on { background: var(--yellow); border-color: var(--yellow); color: #111; }
       .chip.on .n { background: #111; color: var(--yellow); }
       .chip.done { border-color: var(--green); color: #fff; }
       .chip.done .n { background: var(--green); color: #111; }
-      .chip.tip { background: var(--yellow); border-color: var(--yellow); color: #111; }
+      .chip.tip { background: var(--yellow); border-color: var(--yellow); color: #111; padding: 10px 26px; }
       .mt { margin-top: 18px; }
       #vig { background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%); }
       #shade { background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 38%, rgba(0,0,0,0) 100%); }
       #flash { background: #fff; opacity: 0; }
       .ico { display: block; margin: 0 auto 14px; }
-      #progress { position: absolute; left: 70px; right: 150px; top: 810px; display: flex; justify-content: center; gap: 8px; }
+      #progress { position: absolute; left: 90px; right: 110px; top: 300px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+      #g1 .top, #g2 .top, #g3 .top { top: 440px; }
       .stepNo { font-family: "Anton", sans-serif; text-transform: uppercase; font-size: var(--t-head); line-height: 0.98; text-shadow: 0 5px 0 rgba(0,0,0,0.35), 0 10px 32px rgba(0,0,0,0.6); }
       .stepNo span { color: var(--yellow); }
-      .badge { display: inline-flex; align-items: center; gap: 12px; padding: 12px 26px 12px 18px; border-radius: 22px; background: var(--dark); border: 4px solid var(--orange); }
+      .badge { display: inline-flex; align-items: center; justify-content: center; gap: 22px; min-width: 620px; padding: 26px 44px; border-radius: 30px; box-shadow: 0 12px 0 rgba(0,0,0,0.85); background: var(--dark); border: 4px solid var(--orange); }
       #tempU { color: var(--orange); }
-      .card { display: inline-flex; align-items: center; gap: 12px; padding: 12px 22px; border-radius: 22px; background: var(--dark); border: 4px solid var(--yellow); }
+      .card { display: inline-flex; align-items: center; gap: 16px; padding: 22px 32px; border-radius: 30px; box-shadow: 0 12px 0 rgba(0,0,0,0.85); background: var(--dark); border: 4px solid var(--yellow); }
       .card .num { color: var(--yellow); }
       #grabCard { display: inline-block; background: var(--yellow); color: #111; border-radius: 24px; padding: 14px 34px 20px; box-shadow: 0 18px 50px rgba(0,0,0,0.5); }
       #grabCard .head { text-shadow: none; }
-      #arrows { position: absolute; left: 425px; top: 1150px; width: 80px; }
-      #bag { position: absolute; left: 405px; top: 1300px; width: 120px; }
-      #dialWrap { position: relative; width: 190px; height: 190px; margin: 0 auto; }
+      #arrows { position: absolute; left: 485px; top: 1120px; width: 110px; }
+      #bag { position: absolute; left: 460px; top: 1310px; width: 160px; }
+      #dialWrap { position: relative; width: 320px; height: 320px; margin: 0 auto; }
       #dialWrap svg { position: absolute; inset: 0; }
       #dialC { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-      #dialU { font-weight: 900; font-size: var(--t-chip); letter-spacing: 0.12em; color: var(--yellow); }
+      #dialU { font-weight: 900; font-size: var(--t-label); letter-spacing: 0.15em; color: var(--yellow); }
+      .hero { font-family: "Anton", sans-serif; font-size: var(--t-hero); line-height: 1; }
       .chips { display: flex; justify-content: center; gap: 8px; }
     </style>
   </head>
@@ -88,9 +90,9 @@
       <!-- EDUCATION 3.0–14.0 -->
       <div id="gP" class="layer clip" data-start="3.0" data-duration="11.0">
         <div id="progress">
-          <div class="chip" id="p1"><span class="n">1</span>ANGKAT BATANG</div>
-          <div class="chip" id="p2"><span class="n">2</span>KASUT / STOKIN</div>
-          <div class="chip" id="p3"><span class="n">3</span>SET TIMER</div>
+          <div class="chip" id="p1"><span class="n">1</span>BATANG</div>
+          <div class="chip" id="p2"><span class="n">2</span>KASUT/STOKIN</div>
+          <div class="chip" id="p3"><span class="n">3</span>TIMER</div>
         </div>
       </div>
       <div id="g1" class="layer clip" data-start="3.0" data-duration="3.6">
@@ -106,14 +108,14 @@
         <div class="top"><div class="stepNo">Step <span>3</span></div>
           <div class="mt"><span class="sub s-d">Set timer</span></div>
           <div class="mt"><div id="dialWrap"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="178" fill="rgba(8,10,20,0.86)"/><circle cx="200" cy="200" r="160" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="26"/><circle id="dialArc" cx="200" cy="200" r="160" fill="none" stroke="#ffd60a" stroke-width="26" stroke-linecap="round" transform="rotate(-90 200 200)" stroke-dasharray="1005.3" stroke-dashoffset="1005.3"/></svg>
-            <div id="dialC"><div class="num" id="dialNum">0</div><div id="dialU">MINIT</div></div></div></div>
+            <div id="dialC"><div class="hero" id="dialNum">0</div><div id="dialU">MINIT</div></div></div></div>
           <div class="mt"><span class="chip tip">MAKSIMUM 120 MINIT</span></div></div>
       </div>
 
       <!-- USP 1: 48C 14.0–17.2 -->
       <div id="g4" class="layer clip" data-start="14.0" data-duration="3.2">
         <div class="top"><div id="u1H" class="head">Suhu dah <span class="y">lock</span></div>
-          <div class="mt"><div class="badge" id="tempBadge"><svg width="34" height="84" viewBox="0 0 70 170"><rect x="22" y="6" width="26" height="120" rx="13" fill="none" stroke="#fff" stroke-width="7"/><rect id="merc" x="29" y="40" width="12" height="90" rx="6" fill="#ff6a1a"/><circle cx="35" cy="140" r="26" fill="#ff6a1a" stroke="#fff" stroke-width="7"/></svg><div class="num" id="tempNum">0</div><div class="num" id="tempU">&deg;C</div><svg width="30" height="36" viewBox="0 0 92 110"><path id="shackle" d="M22 52 V32 a24 24 0 0 1 48 0 V52" fill="none" stroke="#ffd60a" stroke-width="12" stroke-linecap="round"/><rect x="8" y="50" width="76" height="58" rx="12" fill="#ffd60a"/></svg></div></div></div>
+          <div class="mt"><div class="badge" id="tempBadge"><svg width="50" height="122" viewBox="0 0 70 170"><rect x="22" y="6" width="26" height="120" rx="13" fill="none" stroke="#fff" stroke-width="7"/><rect id="merc" x="29" y="40" width="12" height="90" rx="6" fill="#ff6a1a"/><circle cx="35" cy="140" r="26" fill="#ff6a1a" stroke="#fff" stroke-width="7"/></svg><div class="hero" id="tempNum">0</div><div class="hero" id="tempU">&deg;C</div><svg width="56" height="67" viewBox="0 0 92 110"><path id="shackle" d="M22 52 V32 a24 24 0 0 1 48 0 V52" fill="none" stroke="#ffd60a" stroke-width="12" stroke-linecap="round"/><rect x="8" y="50" width="76" height="58" rx="12" fill="#ffd60a"/></svg></div></div></div>
       </div>
       <!-- USP 2: 200W 17.2–20.8 -->
       <div id="g5" class="layer clip" data-start="17.2" data-duration="3.6">
