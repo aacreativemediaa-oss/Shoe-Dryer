@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop800.woff2") format("woff2"); font-weight: 800; }
+      @font-face { font-family: "Poppins"; src: url("assets/fonts/pop900.woff2") format("woff2"); font-weight: 900; }
+      :root {
+        --yellow: #ffd60a; --orange: #ff6a1a; --red: #ff2d3d; --green: #2bd96b; --blue: #3aa0ff; --dark: rgba(8,10,20,0.86);
+        /* approved type scale */
+        --t-head: 100px; --t-head2: 75px; --t-sub: 64px; --t-cap: 40px; --t-num: 64px; --t-hero: 92px; --t-chip: 34px; --t-label: 24px;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05070d; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Poppins", sans-serif; color: #fff; }
+      .clip { position: absolute; inset: 0; }
+      video.clip { width: 1080px; height: 1920px; object-fit: cover; }
+      .layer { position: absolute; inset: 0; pointer-events: none; }
+      .top { position: absolute; left: 90px; right: 110px; top: 330px; text-align: center; }
+      .head { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: 0.98; font-size: var(--t-head); text-shadow: 0 5px 0 rgba(0,0,0,0.35), 0 10px 32px rgba(0,0,0,0.6); }
+      .head .y { color: var(--yellow); }
+      .sub { display: inline-block; font-family: "Anton", sans-serif; text-transform: uppercase; font-size: var(--t-sub); line-height: 1.05; padding: 8px 28px 12px; border-radius: 16px; box-shadow: 8px 8px 0 rgba(0,0,0,0.85); }
+      .s-y { background: var(--yellow); color: #111; }
+      .s-r { background: var(--red); color: #fff; }
+      .s-d { background: var(--dark); color: #fff; }
+      .s-g { background: var(--green); color: #111; }
+      .tilt { transform: rotate(-3deg); }
+      .num { font-family: "Anton", sans-serif; font-size: var(--t-num); line-height: 1; }
+      .chip { display: inline-flex; align-items: center; gap: 10px; padding: 10px 24px 10px 12px; border-radius: 999px; background: var(--dark); border: 4px solid rgba(255,255,255,0.3); font-weight: 900; font-size: var(--t-chip); color: rgba(255,255,255,0.8); white-space: nowrap; }
+      .chip .n { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 24px; }
+      .chip.on { background: var(--yellow); border-color: var(--yellow); color: #111; }
+      .chip.on .n { background: #111; color: var(--yellow); }
+      .chip.done { border-color: var(--green); color: #fff; }
+      .chip.done .n { background: var(--green); color: #111; }
+      .chip.tip { background: var(--yellow); border-color: var(--yellow); color: #111; padding: 10px 26px; }
+      .mt { margin-top: 18px; }
+      #vig { background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%); }
+      #shade { background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 38%, rgba(0,0,0,0) 100%); }
+      #flash { background: #fff; opacity: 0; }
+      .ico { display: block; margin: 0 auto 14px; }
+      #progress { position: absolute; left: 90px; right: 110px; top: 300px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+      #g1 .top, #g2 .top, #g3 .top { top: 440px; }
+      .stepNo { font-family: "Anton", sans-serif; text-transform: uppercase; font-size: var(--t-head); line-height: 0.98; text-shadow: 0 5px 0 rgba(0,0,0,0.35), 0 10px 32px rgba(0,0,0,0.6); }
+      .stepNo span { color: var(--yellow); }
+      .badge { display: inline-flex; align-items: center; justify-content: center; gap: 22px; min-width: 620px; padding: 26px 44px; border-radius: 30px; box-shadow: 0 12px 0 rgba(0,0,0,0.85); background: var(--dark); border: 4px solid var(--orange); }
+      #tempU { color: var(--orange); }
+      .card { display: inline-flex; align-items: center; gap: 16px; padding: 22px 32px; border-radius: 30px; box-shadow: 0 12px 0 rgba(0,0,0,0.85); background: var(--dark); border: 4px solid var(--yellow); }
+      .card .num { color: var(--yellow); }
+      #grabCard { display: inline-block; background: var(--yellow); color: #111; border-radius: 24px; padding: 14px 34px 20px; box-shadow: 0 18px 50px rgba(0,0,0,0.5); }
+      #grabCard .head { text-shadow: none; }
+      #arrows { position: absolute; left: 485px; top: 1120px; width: 110px; }
+      #bag { position: absolute; left: 460px; top: 1310px; width: 160px; }
+      #dialWrap { position: relative; width: 320px; height: 320px; margin: 0 auto; }
+      #dialWrap svg { position: absolute; inset: 0; }
+      #dialC { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #dialU { font-weight: 900; font-size: var(--t-label); letter-spacing: 0.15em; color: var(--yellow); }
+      .hero { font-family: "Anton", sans-serif; font-size: var(--t-hero); line-height: 1; }
+      .chips { display: flex; justify-content: center; gap: 8px; }
+    
+      .kicker { font-weight: 900; font-size: var(--t-label); letter-spacing: 0.15em; color: var(--yellow); text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6); margin-bottom: 6px; }
+      .head2 { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: 0.98; font-size: var(--t-head2); text-shadow: 0 5px 0 rgba(0,0,0,0.35), 0 10px 32px rgba(0,0,0,0.6); }
+      #rainTint { background: linear-gradient(180deg, rgba(10,25,60,0.72), rgba(10,25,60,0.4) 50%, rgba(5,10,30,0.78)); }
+      .drop { position: absolute; top: 0; width: 3px; border-radius: 3px; background: linear-gradient(180deg, rgba(200,225,255,0), rgba(200,225,255,0.75)); }
+      .cap { top: 1180px; bottom: auto; left: 110px; right: 170px; height: auto; text-align: center; font-weight: 900; font-size: var(--t-cap); line-height: 1.2; text-transform: uppercase; }
+      .cw { display: inline-block; margin: 0 0.08em; color: #fff; -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 6px 14px rgba(0,0,0,0.6); }
+      .cw.emph.on { color: var(--yellow); }
+      #ctaCard { display: inline-block; background: var(--yellow); color: #111; border-radius: 26px; padding: 16px 36px 22px; box-shadow: 0 12px 0 rgba(0,0,0,0.85); }
+      #ctaCard .head { text-shadow: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__TOTAL__" data-width="1080" data-height="1920" data-fps="60">
+      <!--VIDEOS-->
+
+      <div id="vig" class="layer clip" data-start="0" data-duration="__TOTAL__"></div>
+      <div id="shade" class="layer clip" data-start="0" data-duration="__TOTAL__"></div>
+      <div id="rainTint" class="layer clip" data-start="0" data-duration="3.94"></div>
+      <div id="rain" data-layout-allow-overflow class="layer clip" data-start="0" data-duration="3.94"></div>
+
+      <!-- HOOK 0–3.94 -->
+      <div id="g0" class="layer clip" data-start="0" data-duration="3.94">
+        <div class="top">
+          <svg class="ico" id="cloud" width="150" height="120" viewBox="0 0 300 240"><path d="M80 140 a55 55 0 0 1 8-108 a72 72 0 0 1 132 22 a48 48 0 0 1 4 96 z" fill="#dfe8f7"/><g fill="#7fb4ff"><path class="cd" d="M95 165 q10 22 0 36 q-10-14 0-36z"/><path class="cd" d="M150 170 q10 22 0 36 q-10-14 0-36z"/><path class="cd" d="M205 165 q10 22 0 36 q-10-14 0-36z"/></g></svg>
+          <div id="hookH" class="head"><span class="w">Musim</span> <span class="w y">hujan</span><br /><span class="w y">lebat</span> <span class="w">ni!</span></div>
+          <div id="hookS" class="mt"><span class="sub s-r tilt">Kasut &amp; baju<br />lambat kering?</span></div>
+        </div>
+      </div>
+      <!-- PRODUCT 3.94–6.50 -->
+      <div id="g1" class="layer clip" data-start="3.94" data-duration="2.56">
+        <div class="top"><div id="prodH" class="head">Pengering<br /><span class="y">portable</span></div><div id="prodS" class="mt"><span class="sub s-y tilt">Wajib stand by!</span></div></div>
+      </div>
+      <!-- CARA GUNA 6.50–14.94 -->
+      <div id="gP" class="layer clip" data-start="6.5" data-duration="8.44">
+        <div id="progress">
+          <div class="chip" id="p1"><span class="n">1</span>KASUT</div>
+          <div class="chip" id="p2"><span class="n">2</span>BAJU</div>
+          <div class="chip" id="p3"><span class="n">3</span>TIMER</div>
+        </div>
+      </div>
+      <div id="g2" class="layer clip" data-start="6.5" data-duration="1.54">
+        <div class="top" style="top:440px"><div class="kicker">Cara guna</div><div id="senH" class="head">Senang <span class="y">je!</span></div></div>
+      </div>
+      <div id="g3" class="layer clip" data-start="8.04" data-duration="1.7">
+        <div class="top" style="top:440px"><div class="stepNo">Step <span>1</span></div><div class="mt"><span class="sub s-d">Masukkan kasut<br />kat batang</span></div></div>
+      </div>
+      <div id="g4" class="layer clip" data-start="9.74" data-duration="2.24">
+        <div class="top" style="top:440px"><div class="stepNo">Step <span>2</span></div><div class="mt"><span class="sub s-d">Atau selit<br />celah baju</span></div></div>
+      </div>
+      <div id="g5" class="layer clip" data-start="11.98" data-duration="2.96">
+        <div class="top" style="top:440px"><div class="stepNo">Step <span>3</span></div><div class="mt"><span class="sub s-d">On timer</span></div><div id="tunggu" class="mt"><span class="chip tip">TUNGGU SAMPAI KERING</span></div></div>
+      </div>
+      <!-- 120 MINIT 14.94–17.64 -->
+      <div id="g6" class="layer clip" data-start="14.94" data-duration="2.7">
+        <div class="top"><div id="maxH" class="head">Maksimum</div>
+          <div class="mt"><div id="dialWrap"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="178" fill="rgba(8,10,20,0.86)"/><circle cx="200" cy="200" r="160" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="26"/><circle id="dialArc" cx="200" cy="200" r="160" fill="none" stroke="#ffd60a" stroke-width="26" stroke-linecap="round" transform="rotate(-90 200 200)" stroke-dasharray="1005.3" stroke-dashoffset="1005.3"/></svg>
+            <div id="dialC"><div class="hero" id="dialNum">0</div><div id="dialU">MINIT</div></div></div></div>
+        </div>
+      </div>
+      <!-- 48C 17.64–21.74 -->
+      <div id="g7" class="layer clip" data-start="17.64" data-duration="4.1">
+        <div class="top"><div id="lockH" class="head">Suhu dah <span class="y">lock</span></div>
+          <div class="mt"><div class="badge" id="tempBadge"><svg width="50" height="122" viewBox="0 0 70 170"><rect x="22" y="6" width="26" height="120" rx="13" fill="none" stroke="#fff" stroke-width="7"/><rect id="merc" x="29" y="40" width="12" height="90" rx="6" fill="#ff6a1a"/><circle cx="35" cy="140" r="26" fill="#ff6a1a" stroke="#fff" stroke-width="7"/></svg><div class="hero" id="tempNum">0</div><div class="hero" id="tempU">&deg;C</div><svg width="56" height="67" viewBox="0 0 92 110"><path id="shackle" d="M22 52 V32 a24 24 0 0 1 48 0 V52" fill="none" stroke="#ffd60a" stroke-width="12" stroke-linecap="round"/><rect x="8" y="50" width="76" height="58" rx="12" fill="#ffd60a"/></svg></div></div>
+        </div>
+      </div>
+      <!-- KAIN 21.74–23.34 -->
+      <div id="g8" class="layer clip" data-start="21.74" data-duration="1.6">
+        <div class="top"><svg class="ico" id="shield" width="120" height="137" viewBox="0 0 210 240"><path d="M105 10 L190 42 V112 C190 170 152 210 105 230 C58 210 20 170 20 112 V42 Z" fill="#2bd96b" stroke="#fff" stroke-width="10" stroke-linejoin="round"/><path id="shCheck" d="M62 120 l30 30 l58-62" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="160" stroke-dashoffset="160"/></svg>
+          <div id="kainH" class="head">Kain tak <span class="y">rosak</span></div></div>
+      </div>
+      <!-- KOS 23.34–28.98 -->
+      <div id="g9" class="layer clip" data-start="23.34" data-duration="5.64">
+        <div class="top"><svg class="ico" id="bolt" width="70" height="96" viewBox="0 0 80 110"><path d="M48 4 L10 62 H36 L28 106 L70 40 H44 Z" fill="#ffd60a" stroke="#111" stroke-width="5" stroke-linejoin="round"/></svg>
+          <div id="kosH" class="head">Kos elektrik<br /><span class="y">murah</span></div>
+          <div id="kosC" class="mt"><div class="card"><span class="chip on">SEJAM</span><div class="hero">&plusmn; <span id="senNum">0</span> SEN</div></div></div></div>
+      </div>
+      <!-- MANA-MANA 28.98–32.86 -->
+      <div id="g10" class="layer clip" data-start="28.98" data-duration="3.88">
+        <div class="top"><div id="rumahS"><span class="sub s-d">Kat rumah boleh &#10003;</span></div>
+          <div id="travelS" class="mt"><span class="sub s-y tilt">Bawa travel &#10003;</span></div>
+          <div id="bagC" class="mt"><span class="chip tip">SENANG SIMPAN DALAM BAG</span></div></div>
+      </div>
+      <!-- STOK 32.86–33.98 -->
+      <div id="g11" class="layer clip" data-start="32.86" data-duration="1.12">
+        <div class="top"><div id="stokH"><span class="sub s-r tilt" style="font-size:var(--t-head);padding:10px 34px 16px">Stok dah<br />tak banyak!</span></div></div>
+      </div>
+      <!-- CTA 33.98–end -->
+      <div id="g12" class="layer clip" data-start="33.98" data-duration="__CTADUR__">
+        <div class="top"><div id="soldS"><span class="sub s-r tilt">Sebelum sold out!</span></div>
+          <div id="ctaW" class="mt"><div id="ctaCard"><div class="head">Check out<br />sekarang</div></div></div>
+          <div id="linkS" class="mt"><span class="sub s-d">Kat link <span style="color:var(--yellow)">bawah</span></span></div></div>
+        <svg id="arrows" viewBox="0 0 120 200"><path class="ar" d="M15 20 L60 60 L105 20" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 80 L60 120 L105 80" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path class="ar" d="M15 140 L60 180 L105 140" fill="none" stroke="#ffd60a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg id="bag" viewBox="0 0 170 170"><path d="M52 62 V48 a33 33 0 0 1 66 0 V62" fill="none" stroke="#111" stroke-width="11" stroke-linecap="round"/><path d="M22 58 H148 L138 158 H32 Z" fill="#ffd60a" stroke="#111" stroke-width="9" stroke-linejoin="round"/><path d="M60 98 a25 25 0 0 0 50 0" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/></svg>
+      </div>
+
+      <!--CAPTIONS-->
+
+      <div id="flash" class="layer clip" data-start="0" data-duration="__TOTAL__"></div>
+
+      <audio id="vo" src="assets/audio/vo_original.m4a" data-start="0" data-duration="37.08" data-volume="1"></audio>
+      <!--SFX-->
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: 0.18, ease: "power2.out", immediateRender: false }, t);
+      const pop = (s, t, extra = {}) => tl.from(s, Object.assign({ scale: 0.3, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, extra), t);
+      const slam = (s, t) => tl.from(s, { scale: 2.2, opacity: 0, duration: 0.3, ease: "power4.out" }, t);
+      const hl = (s, t, c) => { tl.set(s, { className: c + " on" }, t); tl.fromTo(s, { scale: 1.15 }, { scale: 1, duration: 0.18, ease: "back.out(3)", immediateRender: false }, t); };
+      const count = (id, to, t, d) => { const o = { v: 0 }; tl.to(o, { v: to, duration: d, ease: "power2.out", onUpdate: () => { document.getElementById(id).textContent = Math.round(o.v); } }, t); };
+
+      /* footage: no zoom / close-up, soft flash on cuts only */
+      /*VIDJS*/
+
+      /* rain */
+      (function () {
+        const rain = document.getElementById("rain"); let seed = 17;
+        const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
+        for (let i = 0; i < 60; i++) {
+          const d = document.createElement("div"); d.className = "drop";
+          d.style.left = Math.round(rnd() * 1120 - 20) + "px"; d.style.height = Math.round(60 + rnd() * 110) + "px"; d.style.opacity = (0.35 + rnd() * 0.6).toFixed(2);
+          rain.appendChild(d);
+          const sp = 0.35 + rnd() * 0.3, off = rnd() * sp;
+          for (let r = 0; r < Math.ceil(4.1 / sp) + 1; r++)
+            tl.fromTo(d, { y: -220, x: 0, rotation: 12 }, { y: 2000, x: -120, rotation: 12, duration: sp, ease: "none", immediateRender: false }, Math.max(0, r * sp - off));
+        }
+      })();
+
+      /* hook */
+      gsap.utils.toArray("#hookH .w").forEach((w, i) => i < 2
+        ? tl.fromTo(w, { y: -24 }, { y: 0, duration: 0.3, ease: "back.out(2)" }, 0)
+        : tl.from(w, { y: 70, scale: 0.4, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, 0.54 + (i - 2) * 0.22));
+      tl.from("#cloud", { y: -50, opacity: 0, duration: 0.4, ease: "back.out(1.8)" }, 0.1);
+      tl.fromTo("#cloud .cd", { y: -8, opacity: 0 }, { y: 24, opacity: 1, duration: 0.45, stagger: 0.15, repeat: 5, ease: "power1.in" }, 0.4);
+      tl.from("#hookS .sub", { scale: 2.4, opacity: 0, rotation: -10, duration: 0.3, ease: "power4.out" }, 1.02);
+      tl.to("#hookS .sub", { x: 8, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, 2.48);
+      /* product */
+      slam("#prodH", 3.96); tl.from("#prodS .sub", { scale: 2.4, opacity: 0, rotation: -10, duration: 0.3, ease: "power4.out" }, 5.46);
+      /* cara guna */
+      tl.from("#progress .chip", { y: -30, opacity: 0, duration: 0.25, stagger: 0.06, ease: "back.out(2)" }, 6.52);
+      tl.from("#g2 .kicker", { y: -20, opacity: 0, duration: 0.25 }, 6.52); slam("#senH", 7.38);
+      [["#p1", 8.04, 9.74], ["#p2", 9.74, 11.98], ["#p3", 11.98, 99]].forEach(([c, t, e]) => {
+        tl.set(c, { className: "chip on" }, t); tl.fromTo(c, { scale: 1.35 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        if (e < 99) tl.set(c, { className: "chip done" }, e);
+      });
+      [["#g3", 8.04], ["#g4", 9.74], ["#g5", 11.98]].forEach(([g, t]) => { slam(g + " .stepNo", t + 0.03); tl.from(g + " .sub", { y: 40, opacity: 0, duration: 0.3, ease: "back.out(2)" }, t + 0.18); });
+      pop("#tunggu", 13.44, { y: 20 });
+      /* 120 */
+      slam("#maxH", 14.96); pop("#dialWrap", 15.2);
+      count("dialNum", 120, 15.6, 1.2); tl.to("#dialArc", { attr: { "stroke-dashoffset": 0 }, duration: 1.2, ease: "power2.out" }, 15.6);
+      /* 48C */
+      slam("#lockH", 17.66);
+      tl.from("#tempBadge", { y: -50, opacity: 0, duration: 0.35, ease: "back.out(1.7)" }, 18.0);
+      count("tempNum", 48, 19.4, 1.0);
+      tl.fromTo("#merc", { attr: { y: 120, height: 10 } }, { attr: { y: 30, height: 100 }, duration: 1.0, ease: "power2.out" }, 19.4);
+      tl.fromTo("#shackle", { y: -22 }, { y: 0, duration: 0.16, ease: "power4.in", immediateRender: false }, 20.1);
+      tl.fromTo("#tempBadge", { boxShadow: "0 12px 0 rgba(0,0,0,0.85)" }, { boxShadow: "0 0 60px rgba(255,106,26,0.9)", duration: 0.3, yoyo: true, repeat: 3, immediateRender: false }, 20.44);
+      /* kain */
+      pop("#shield", 21.76); tl.to("#shCheck", { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.out" }, 22.0); slam("#kainH", 22.58);
+      /* kos */
+      pop("#bolt", 23.36); tl.to("#bolt", { scale: 1.15, duration: 0.15, yoyo: true, repeat: 5, ease: "sine.inOut" }, 23.7);
+      slam("#kosH", 24.54);
+      tl.from("#kosC", { y: 50, opacity: 0, duration: 0.35, ease: "back.out(2)" }, 26.2);
+      count("senNum", 10, 28.0, 0.46);
+      tl.fromTo("#kosC .card", { scale: 1 }, { scale: 1.08, duration: 0.14, yoyo: true, repeat: 1, immediateRender: false }, 28.56);
+      /* mana-mana */
+      pop("#rumahS", 29.82, { x: -300, scale: 0.8 });
+      tl.from("#travelS .sub", { scale: 2.4, opacity: 0, rotation: -10, duration: 0.3, ease: "power4.out" }, 31.24);
+      pop("#bagC", 32.06, { y: 20 });
+      /* stok */
+      tl.from("#stokH .sub", { scale: 3, opacity: 0, rotation: -15, duration: 0.3, ease: "power4.out" }, 32.88);
+      tl.to("#stokH .sub", { rotation: 2, duration: 0.07, yoyo: true, repeat: 7, ease: "none" }, 33.2);
+      /* CTA */
+      tl.from("#soldS .sub", { scale: 2.4, opacity: 0, rotation: -10, duration: 0.3, ease: "power4.out" }, 34.58);
+      tl.from("#ctaW", { y: 600, opacity: 0, duration: 0.45, ease: "back.out(1.4)" }, 35.72);
+      pop("#linkS", 36.42, { y: 30 });
+      tl.from("#arrows", { opacity: 0, duration: 0.12 }, 36.5);
+      tl.fromTo("#arrows .ar", { opacity: 0.15 }, { opacity: 1, duration: 0.12, stagger: 0.08, repeat: 5, yoyo: true, ease: "none", immediateRender: false }, 36.5);
+      tl.from("#bag", { scale: 0, rotation: -30, duration: 0.3, ease: "back.out(2.5)" }, 36.56);
+
+      /* captions */
+      /*CAPJS*/
+
+      /* explicit clip visibility (render-path independent) */
+      document.querySelectorAll("#root [data-start]:not(video):not(audio)").forEach((el) => {
+        const st = parseFloat(el.dataset.start), du = parseFloat(el.dataset.duration);
+        tl.set(el, { visibility: st > 0 ? "hidden" : "visible" }, 0);
+        if (st > 0) tl.set(el, { visibility: "visible" }, st);
+        if (st + du < __TOTAL__ - 0.001) tl.set(el, { visibility: "hidden" }, st + du);
+      });
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
